@@ -11,7 +11,7 @@ const gravity = 0.8
 const background = new Background(
   {
     position: { x: 0, y: 0 },
-    imageSrc: '../assets/background.png'
+    imageSrc: './assets/background.png'
   }
 )
 
@@ -38,7 +38,7 @@ const reactangularCollisionDetection = ({ rect1, rect2 }) => {
 
 const hit_detection = () => {
   if (reactangularCollisionDetection({ rect1: player, rect2: enermy }) && player.isAttacking) {
-    new Audio('../assets/sounds/dash.wav').play()
+    new Audio('./assets/sounds/dash.wav').play()
     enermy.hitpoint -= 15
     player.isAttacking = false
   } else {

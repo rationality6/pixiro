@@ -8,10 +8,19 @@ ctx.fillRect(0, 0, canvas.width, canvas.height);
 
 const gravity = 0.8
 
-const background = new Background(
+const background = new Sprite(
   {
     position: { x: 0, y: 0 },
     imageSrc: './assets/background.png'
+  }
+)
+
+const shop = new Sprite(
+  {
+    position: { x: 600, y: 128 },
+    imageSrc: './assets/shop.png',
+    scale: 2.75,
+    framesMax: 6
   }
 )
 
@@ -46,13 +55,27 @@ const hit_detection = () => {
   }
 }
 
+
+const enemy_collision_detection = ({ player, enermy }) => {
+  if (player.position.x + player.width >= enermy.position.x) {
+    player.velocity.x = 0
+  }
+
+  // // left side
+  // if (player.position.x <= 0) {
+  //   player.position.x = 0
+  // }
+
+}
+
 const animate = () => {
   window.requestAnimationFrame(animate)
 
   background.update()
+  shop.update()
 
-  player.enemy_collision_detection({ enermy })
-  
+  enemy_collision_detection({ player, enermy })
+
   player.update()
   enermy.update()
 

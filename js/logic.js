@@ -27,14 +27,21 @@ const shop = new Sprite(
 const player = new Fighter(
   {
     position: { x: 100, y: 100 },
-    velocity: { x: 0, y: 0 }
+    velocity: { x: 0, y: 0 },
+    imageSrc: './assets/samuraiMack/Idle.png',
+    framesMax: 8,
+    scale: 2.5,
+    offset: { x: 215, y: 152 }
   }
 )
 
 const enermy = new Fighter(
   {
     position: { x: 800, y: 100 },
-    velocity: { x: 0, y: 0 }
+    velocity: { x: 0, y: 0 },
+    imageSrc: './assets/samuraiMack/Idle.png',
+    framesMax: 8,
+    scale: 2.5
   }
 )
 
@@ -56,9 +63,9 @@ const hit_detection = () => {
 }
 
 
-const enemy_collision_detection = ({ player, enermy }) => {
-  if (player.position.x + player.width >= enermy.position.x) {
-    player.velocity.x = 0
+const object_collision_detection = ({ player, enermy }) => {
+  if (player.position.x + player.width > enermy.position.x) {
+    player.position.x -= player.position.x + player.width
   }
 
   // // left side
@@ -74,10 +81,10 @@ const animate = () => {
   background.update()
   shop.update()
 
-  enemy_collision_detection({ player, enermy })
-
   player.update()
   enermy.update()
+
+  object_collision_detection({ player, enermy })
 
   hit_detection()
 }

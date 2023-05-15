@@ -1,5 +1,5 @@
 class Sprite {
-  constructor({ position, imageSrc, scale = 1, framesMax = 1 }) {
+  constructor({ position, imageSrc, scale = 1, framesMax = 1, offset = { x: 0, y: 0 } }) {
     this.position = position
     this.width = 50
     this.height = 150
@@ -10,6 +10,7 @@ class Sprite {
     this.framesCurrent = 0
     this.framesElapsed = 0
     this.framesHold = 10
+    this.offset = offset
   }
   draw() {
     ctx.drawImage(
@@ -18,8 +19,8 @@ class Sprite {
       0,
       this.image.width / this.framesMax,
       this.image.height,
-      this.position.x,
-      this.position.y,
+      this.position.x - this.offset.x,
+      this.position.y - this.offset.y,
       (this.image.width / this.framesMax) * this.scale,
       this.image.height * this.scale)
   }
@@ -36,10 +37,16 @@ class Sprite {
   }
 }
 
-class Fighter {
-  constructor({ position, velocity }) {
+class Fighter extends Sprite {
+  constructor({ position, velocity, imageSrc, scale = 1, framesMax = 1, offset = { x: 0, y: 0 } }) {
+    super({
+      position,
+      imageSrc,
+      scale,
+      framesMax,
+      offset
+    })
     this.hitpoint = 100
-    this.position = position
     this.velocity = velocity
     this.height = 150
     this.width = 50
@@ -52,32 +59,45 @@ class Fighter {
       height: 60
     }
     this.isAttacking = false
+
+    this.framesCurrent = 0
+    this.framesElapsed = 0
+    this.framesHold = 10
   }
 
-  draw() {
-    ctx.strokeStyle = 'red'
-    ctx.lineWidth = 2;
-    ctx.strokeRect(this.position.x, this.position.y, this.width, this.height)
+  // draw() {
+  //   ctx.strokeStyle = 'red'
+  //   ctx.lineWidth = 2;
+  //   ctx.strokeRect(this.position.x, this.position.y, this.width, this.height)
 
-    ctx.strokeStyle = 'blue'
-    ctx.lineWidth = 2;
-    ctx.strokeRect(this.position.x + 1, this.position.y + 1, this.width + 1, this.height + 1)
+  //   ctx.strokeStyle = 'blue'
+  //   ctx.lineWidth = 2;
+  //   ctx.strokeRect(this.position.x + 1, this.position.y + 1, this.width + 1, this.height + 1)
 
-    // attack box
-    if (!this.isAttacking) {
-      ctx.strokeStyle = 'green'
-      ctx.lineWidth = 2;
-      ctx.strokeRect(this.attackBox.position.x, this.attackBox.position.y, this.attackBox.width, this.attackBox.height)
-    }
+  //   // attack box
+  //   if (this.isAttacking) {
+  //     ctx.strokeStyle = 'green'
+  //     ctx.lineWidth = 2;
+  //     ctx.strokeRect(this.attackBox.position.x, this.attackBox.position.y, this.attackBox.width, this.attackBox.height)
+  //   }
 
-    // hitpoint
-    ctx.fillStyle = 'white'
-    ctx.font = '20px Arial'
-    ctx.fillText(`HP: ${this.hitpoint}`, this.position.x, this.position.y - 10)
+  //   // hitpoint
+  //   ctx.fillStyle = 'white'
+  //   ctx.font = '20px Arial'
+  //   ctx.fillText(`HP: ${this.hitpoint}`, this.position.x, this.position.y - 10)
 
-  }
+  // }
 
   update() {
+    this.framesElapsed += 1
+    if (this.framesElapsed % this.framesHold === 0) {
+      if (this.framesCurrent < this.framesMax - 1) {
+        this.framesCurrent += 1
+      } else {
+        this.framesCurrent = 0
+      }
+    }
+    
     this.position.x += this.velocity.x
     this.position.y += this.velocity.y
     this.attackBox.position.x = this.position.x - 30
@@ -91,7 +111,8 @@ class Fighter {
   }
 
   floor_collision_detection_and_gravity() {
-    if (this.position.y + this.height + this.velocity.y >= canvas.height) {
+    const ground = 100
+    if (this.position.y + this.height + this.velocity.y >= canvas.height - ground) {
       this.velocity.y = 0
     } else {
       this.velocity.y += gravity
@@ -107,17 +128,6 @@ class Fighter {
     // right side
     if (this.position.x + this.width >= canvas.width) {
       this.position.x = canvas.width - this.width
-    }
-
-    // left side
-    if (this.position.x <= 0) {
-      this.position.x = 0
-    }
-  }
-
-  enemy_collision_detection({ enermy }) {
-    if (this.position.x + this.width >= enermy.position.x) {
-      this.position.x = enermy.position.x - this.width
     }
 
     // left side

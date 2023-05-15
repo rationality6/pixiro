@@ -65,30 +65,7 @@ class Fighter extends Sprite {
     this.framesHold = 10
   }
 
-  // draw() {
-  //   ctx.strokeStyle = 'red'
-  //   ctx.lineWidth = 2;
-  //   ctx.strokeRect(this.position.x, this.position.y, this.width, this.height)
-
-  //   ctx.strokeStyle = 'blue'
-  //   ctx.lineWidth = 2;
-  //   ctx.strokeRect(this.position.x + 1, this.position.y + 1, this.width + 1, this.height + 1)
-
-  //   // attack box
-  //   if (this.isAttacking) {
-  //     ctx.strokeStyle = 'green'
-  //     ctx.lineWidth = 2;
-  //     ctx.strokeRect(this.attackBox.position.x, this.attackBox.position.y, this.attackBox.width, this.attackBox.height)
-  //   }
-
-  //   // hitpoint
-  //   ctx.fillStyle = 'white'
-  //   ctx.font = '20px Arial'
-  //   ctx.fillText(`HP: ${this.hitpoint}`, this.position.x, this.position.y - 10)
-
-  // }
-
-  update() {
+  animateFrame() {
     this.framesElapsed += 1
     if (this.framesElapsed % this.framesHold === 0) {
       if (this.framesCurrent < this.framesMax - 1) {
@@ -97,17 +74,39 @@ class Fighter extends Sprite {
         this.framesCurrent = 0
       }
     }
-    
+  }
+
+  update() {
+    // attack box
+    if (this.isAttacking) {
+      ctx.strokeStyle = 'green'
+      ctx.lineWidth = 2;
+      ctx.strokeRect(this.attackBox.position.x, this.attackBox.position.y, this.attackBox.width, this.attackBox.height)
+    }
+
+    // body box
+    ctx.strokeStyle = 'red'
+    ctx.lineWidth = 2;
+    ctx.strokeRect(this.position.x, this.position.y, this.width, this.height)
+
+    ctx.strokeStyle = 'blue'
+    ctx.lineWidth = 2;
+    ctx.strokeRect(this.position.x + 1, this.position.y + 1, this.width + 1, this.height + 1)
+
+    // hitpoint
+    ctx.fillStyle = 'white'
+    ctx.font = '20px Arial'
+    ctx.fillText(`HP: ${this.hitpoint}`, this.position.x, this.position.y - 10)
+
     this.position.x += this.velocity.x
     this.position.y += this.velocity.y
     this.attackBox.position.x = this.position.x - 30
     this.attackBox.position.y = this.position.y + 30
 
     this.floor_collision_detection_and_gravity()
-
     this.wall_collision_detection()
-
     this.draw()
+    this.animateFrame()
   }
 
   floor_collision_detection_and_gravity() {

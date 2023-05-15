@@ -39,9 +39,10 @@ const enermy = new Fighter(
   {
     position: { x: 800, y: 100 },
     velocity: { x: 0, y: 0 },
-    imageSrc: './assets/samuraiMack/Idle.png',
-    framesMax: 8,
-    scale: 2.5
+    imageSrc: './assets/kenji/Idle.png',
+    framesMax: 4,
+    scale: 2.5,
+    offset: { x: 215, y: 152 }
   }
 )
 

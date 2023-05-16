@@ -80,14 +80,18 @@ class Fighter extends Sprite {
     };
     this.isAttacking = false;
 
+    // animation
     this.framesCurrent = 0;
     this.framesElapsed = 0;
     this.framesHold = 10;
 
-    this.sprites = sprites;
-
-    this.middle_of_attacking = false;
+    // gatling
     this.gatling_count = 0;
+    this.gatlingStart = false;
+    this.gatlingTimeoutHandler = null;
+
+    // sprites
+    this.sprites = sprites;
     for (const sprite in sprites) {
       this.sprites[sprite].image = new Image();
       this.sprites[sprite].image.src = this.sprites[sprite].imageSrc;
@@ -151,17 +155,32 @@ class Fighter extends Sprite {
 
   attack() {
     this.isAttacking = true;
-    setTimeout(() => (this.isAttacking = false), 200);
+    setTimeout(() => (this.isAttacking = false), 500);
   }
 
   gatling_attack() {
-    this.middle_of_attacking = true;
-    const timeoutHandler = setTimeout(() => (this.middle_of_attacking = false), 1000);
-    if (this.middle_of_attacking) {
-      console.log("middle of attacking");
+    if (this.gatlingStart == true) {
+      this.attack();
+      this.gatling_count += 1;
+      clearTimeout(this.gatlingTimeoutHandler);
+      console.log("clear gatling attack start");
+
+      this.gatlingTimeoutHandler = setTimeout(() => {
+        console.log(`gatling attack end ${this.gatling_count}}`);
+        this.gatlingStart = false;
+        this.gatling_count = 0;
+      }, 1000);
     } else {
-      window.clearTimeout(timeoutHandler);
-      const timeoutHandler = setTimeout(() => (this.middle_of_attacking = false), 1000);
+      this.attack();
+      this.gatlingStart = true;
+      this.gatling_count += 1;
+      console.log("gatling attack start");
+
+      this.gatlingTimeoutHandler = setTimeout(() => {
+        this.gatlingStart = false;
+        this.gatling_count = 0;
+        console.log("gatling attack end");
+      }, 1000);
     }
   }
 

@@ -124,9 +124,9 @@ window.addEventListener("keydown", (e) => {
   if (e.code == "Space") {
     player.image = player.sprites.attack.image;
     player.framesMax = player.sprites.attack.framesMax;
-    player.framesHold = 3;
+    player.framesHold = 4;
     
-    player.attack();
+    player.gatling_attack();
   }
 });
 

@@ -43,8 +43,8 @@ const player = new Fighter({
     attack2: {
       imageSrc: "./assets/samuraiMack/Attack2.png",
       framesMax: 6,
-    }
-  }
+    },
+  },
 });
 
 const enermy = new Fighter({
@@ -80,8 +80,9 @@ const hit_detection = () => {
 };
 
 const object_collision_detection = ({ player, enermy }) => {
-  if (player.position.x + player.width > enermy.position.x) {
-    player.position.x -= player.position.x + player.width;
+  // right side collision
+  if (player.position.x + player.width >= enermy.position.x) {
+    player.velocity.x = -7;
   }
 
   // // left side
@@ -106,31 +107,29 @@ const animate = () => {
 
 animate();
 
-window.addEventListener("keydown", (e) => {
-  if (e.key === "ArrowUp") {
-    if (player.velocity.y === 0) {
+window.addEventListener("keydown", (event) => {
+  // console.log(event.key)
+  switch (event.key) {
+    case "ArrowUp":
       player.velocity.y = -15;
-    }
-  }
-
-  if (e.key === "ArrowRight") {
-    player.velocity.x = 7;
-  }
-
-  if (e.key === "ArrowLeft") {
-    player.velocity.x = -7;
-  }
-
-  if (e.code == "Space") {
-    player.image = player.sprites.attack.image;
-    player.framesMax = player.sprites.attack.framesMax;
-    player.framesHold = 4;
-    
-    player.gatling_attack();
+      break;
+    case "ArrowRight":
+      player.velocity.x = 7;
+      break;
+    case "ArrowLeft":
+      player.velocity.x = -7;
+      break;
+    case " ":
+      player.image = player.sprites.attack.image;
+      player.framesMax = player.sprites.attack.framesMax;
+      player.framesHold = 4;
+      player.gatling_attack();
+      break
   }
 });
 
 window.addEventListener("keyup", (e) => {
+  // console.log(event.key)
   if (e.key === "ArrowRight") {
     player.velocity.x = 0;
   }

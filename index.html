@@ -1,25 +1,41 @@
 <!DOCTYPE html>
 <html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>pixiro</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+  </head>
 
-<head>
-  <meta charset="UTF-8">
-  <meta http-equiv="X-UA-Compatible" content="IE=edge">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>pixiro</title>
-  <script src="https://cdn.tailwindcss.com"></script>
-</head>
+  <body>
+    <div class="absolute">
+      <div class="flex content-center items-center">
+        <div class="inline-block text-white w-11">Mack</div>
+        <div
+          id="playerHealth"
+          class="inline-block bg-red-400 h-4"
+          style="width: 100px"
+        ></div>
+      </div>
 
-<body>
+      <div class="flex content-center items-center">
+        <div class="inline-block text-white w-11">Kenji</div>
+        <div
+          id="enermyHealth"
+          class="inline-block bg-red-300 h-4"
+          style="width: 100px"
+        ></div>
+      </div>
+      <div class="text-white" id="timer"></div>
+    </div>
 
-  <div class="absolute">
-    <div id="playerHealth" class="bg-red-400 w-24 h-4"></div>
-    <div id="enermyHealth" class="bg-red-300 w-24 h-4"></div>
-  </div>
+    <div class="float-left inline-block justify-center flex items-center">
+      <div id="displayText" class="absolute text-white text-8xl"></div>
+      <canvas id="canvas"></canvas>
+    </div>
 
-  <canvas id="canvas"></canvas>
-
-  <script src="./js/classes.js"></script>
-  <script src="./js/logic.js"></script>
-</body>
-
+    <script src="./js/classes.js"></script>
+    <script src="./js/logic.js"></script>
+  </body>
 </html>

@@ -70,6 +70,7 @@ class Fighter extends Sprite {
     this.velocity = velocity;
     this.height = 150;
     this.width = 50;
+    
     this.attackBox = {
       position: {
         x: this.position.x,
@@ -78,6 +79,7 @@ class Fighter extends Sprite {
       width: 260,
       height: 160,
     };
+
     this.isAttacking = false;
 
     // animation
@@ -142,7 +144,7 @@ class Fighter extends Sprite {
   }
 
   floor_collision_detection_and_gravity() {
-    const ground = 100;
+    const ground = 60;
     if (
       this.position.y + this.height + this.velocity.y >=
       canvas.height - ground
@@ -196,3 +198,14 @@ class Fighter extends Sprite {
     }
   }
 }
+
+let soundEffectMixin = {
+  playSoundDash() {
+    new Audio("./assets/sounds/dash.wav").play();
+  },
+  playSoundHit() {
+    new Audio("./assets/sounds/hit.wav").play();
+  },
+};
+
+Object.assign(Fighter.prototype, soundEffectMixin);

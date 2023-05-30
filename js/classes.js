@@ -5,7 +5,7 @@ class Sprite {
     scale = 1,
     framesMax = 1,
     offset = { x: 0, y: 0 },
-    framesHold = 10
+    framesHold = 10,
   }) {
     this.position = position;
     this.width = 50;
@@ -71,7 +71,7 @@ class Fighter extends Sprite {
     this.velocity = velocity;
     this.height = 150;
     this.width = 50;
-    
+
     this.attackBox = {
       position: {
         x: this.position.x,
@@ -95,7 +95,11 @@ class Fighter extends Sprite {
 
     // sprites
     this.sprites = sprites;
-    for (const sprite in sprites) {
+    this.mapping_sprites();
+  }
+
+  mapping_sprites() {
+    for (const sprite in this.sprites) {
       this.sprites[sprite].image = new Image();
       this.sprites[sprite].image.src = this.sprites[sprite].imageSrc;
     }
@@ -147,7 +151,8 @@ class Fighter extends Sprite {
   floor_collision_detection_and_gravity() {
     const ground = 60;
     if (
-      this.position.y + this.height + this.velocity.y >= canvas.height - ground
+      this.position.y + this.height + this.velocity.y >=
+      canvas.height - ground
     ) {
       this.velocity.y = 0;
     } else {
@@ -208,4 +213,3 @@ let soundEffectMixin = {
 };
 
 Object.assign(Fighter.prototype, soundEffectMixin);
-

@@ -10,55 +10,14 @@ const gravity = 0.8;
 
 let timer = 30;
 
-const background = new Sprite({
-  position: { x: 0, y: 0 },
-  scale: 0.63,
-  imageSrc: "./assets/background.png",
-});
-
-const shop = new Sprite({
-  position: { x: 260, y: -16 },
-  imageSrc: "./assets/shop.png",
-  scale: 2.5,
-  framesHold: 8,
-  framesMax: 6,
-});
+const stage = new DarkForest();
 
 const player = new Mack({
   position: { x: 100, y: 50 },
-  velocity: { x: 0, y: 0 },
-  imageSrc: "./assets/samuraiMack/Idle.png",
-  framesMax: 8,
-  scale: 2.5,
-  offset: { x: 215, y: 152 },
-  sprites: {
-    idle: {
-      imageSrc: "./assets/samuraiMack/Idle.png",
-      framesMax: 8,
-    },
-    run: {
-      imageSrc: "./assets/samuraiMack/Run.png",
-      framesMax: 8,
-    },
-    attack: {
-      imageSrc: "./assets/samuraiMack/Attack1.png",
-      framesMax: 6,
-    },
-    attack2: {
-      imageSrc: "./assets/samuraiMack/Attack2.png",
-      framesMax: 6,
-    },
-  },
+  imageSrc: "./assets/samuraiMack/Idle.png"
 });
 
-const enermy = new Fighter({
-  position: { x: 500, y: 50 },
-  velocity: { x: 0, y: 0 },
-  imageSrc: "./assets/kenji/Idle.png",
-  framesMax: 4,
-  scale: 2.5,
-  offset: { x: 215, y: 169 },
-});
+const enermy = new Kenji({ position: { x: 500, y: 50 } });
 
 const reactangularCollisionDetection = ({ rect1, rect2 }) => {
   return (
@@ -153,8 +112,7 @@ decreseTime();
 const animate = () => {
   window.requestAnimationFrame(animate);
 
-  background.update();
-  shop.update();
+  stage.update_stage();
 
   player.update();
   enermy.update();
@@ -198,7 +156,7 @@ window.addEventListener("keydown", (event) => {
       lastPressedKey = event.key;
       break;
     case " ":
-      player.image = player.sprites.attack.image;
+      player.image.src = player.sprites.attack.image.src;
       player.framesMax = player.sprites.attack.framesMax;
       player.framesHold = 4;
       player.gatling_attack();
@@ -206,7 +164,6 @@ window.addEventListener("keydown", (event) => {
   }
 
   // lastPressedHandler = setTimeout(() => (lastPressedKey = ""), 500);
-  
 });
 
 window.addEventListener("keyup", (event) => {

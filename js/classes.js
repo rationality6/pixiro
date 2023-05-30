@@ -5,6 +5,7 @@ class Sprite {
     scale = 1,
     framesMax = 1,
     offset = { x: 0, y: 0 },
+    framesHold = 10
   }) {
     this.position = position;
     this.width = 50;
@@ -15,7 +16,7 @@ class Sprite {
     this.framesMax = framesMax;
     this.framesCurrent = 0;
     this.framesElapsed = 0;
-    this.framesHold = 10;
+    this.framesHold = framesHold;
     this.offset = offset;
   }
   draw() {
@@ -85,7 +86,7 @@ class Fighter extends Sprite {
     // animation
     this.framesCurrent = 0;
     this.framesElapsed = 0;
-    this.framesHold = 10;
+    this.framesHold = 5;
 
     // gatling
     this.gatling_count = 0;
@@ -146,8 +147,7 @@ class Fighter extends Sprite {
   floor_collision_detection_and_gravity() {
     const ground = 60;
     if (
-      this.position.y + this.height + this.velocity.y >=
-      canvas.height - ground
+      this.position.y + this.height + this.velocity.y >= canvas.height - ground
     ) {
       this.velocity.y = 0;
     } else {
@@ -165,10 +165,9 @@ class Fighter extends Sprite {
       this.attack();
       this.gatling_count += 1;
       clearTimeout(this.gatlingTimeoutHandler);
-      console.log("clear gatling attack start");
-
+      // console.log("clear gatling attack start");
       this.gatlingTimeoutHandler = setTimeout(() => {
-        console.log(`gatling attack end ${this.gatling_count}}`);
+        // console.log(`gatling attack end ${this.gatling_count}}`);
         this.gatlingStart = false;
         this.gatling_count = 0;
       }, 1000);
@@ -176,12 +175,12 @@ class Fighter extends Sprite {
       this.attack();
       this.gatlingStart = true;
       this.gatling_count += 1;
-      console.log("gatling attack start");
+      // console.log("gatling attack start");
 
       this.gatlingTimeoutHandler = setTimeout(() => {
         this.gatlingStart = false;
         this.gatling_count = 0;
-        console.log("gatling attack end");
+        // console.log("gatling attack end");
       }, 1000);
     }
   }
@@ -209,3 +208,4 @@ let soundEffectMixin = {
 };
 
 Object.assign(Fighter.prototype, soundEffectMixin);
+

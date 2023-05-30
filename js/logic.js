@@ -20,10 +20,11 @@ const shop = new Sprite({
   position: { x: 260, y: -16 },
   imageSrc: "./assets/shop.png",
   scale: 2.5,
+  framesHold: 8,
   framesMax: 6,
 });
 
-const player = new Fighter({
+const player = new Mack({
   position: { x: 100, y: 50 },
   velocity: { x: 0, y: 0 },
   imageSrc: "./assets/samuraiMack/Idle.png",
@@ -88,7 +89,7 @@ const hit_detection = () => {
 const object_collision_detection = ({ player, enermy }) => {
   // right side collision
   if (player.position.x + player.width >= enermy.position.x) {
-    player.velocity.x = -7;
+    player.velocity.x = 0;
   }
 
   // // left side
@@ -98,7 +99,7 @@ const object_collision_detection = ({ player, enermy }) => {
 };
 
 const determineWinner = ({ player, enermy, timerId }) => {
-  clearTimeout(timerId)
+  clearTimeout(timerId);
   if (player.hitpoint === enermy.hitpoint) {
     document.querySelector("#displayText").innerHTML = "Tie";
   }
@@ -110,7 +111,7 @@ const determineWinner = ({ player, enermy, timerId }) => {
   }
 };
 
-let timerId
+let timerId;
 
 const decreseTime = () => {
   if (timer) {
@@ -120,9 +121,31 @@ const decreseTime = () => {
   timerId = setTimeout(decreseTime, 1000);
   document.querySelector("#timer").innerHTML = timer;
 
+  // set begin title
+  if (timer > 28) {
+    document.querySelector("#displayText").innerHTML = "Let's rock";
+  } else {
+    document.querySelector("#displayText").innerHTML = "";
+  }
+
   if (timer === 0) {
     determineWinner({ player, enermy, timerId });
   }
+};
+
+let lastPressedKey;
+let lastPressedHandler;
+
+const keys = {
+  ArrayUp: {
+    pressed: false,
+  },
+  ArrowLeft: {
+    pressed: false,
+  },
+  ArrowRight: {
+    pressed: false,
+  },
 };
 
 decreseTime();
@@ -140,6 +163,14 @@ const animate = () => {
 
   hit_detection();
 
+  player.velocity.x = 0;
+  if (keys.ArrowRight.pressed && lastPressedKey === "ArrowRight") {
+    player.velocity.x = 7;
+  }
+  if (keys.ArrowLeft.pressed && lastPressedKey === "ArrowLeft") {
+    player.velocity.x = -7;
+  }
+
   // end game based on health
   if (player.hitpoint <= 0 || enermy.hitpoint <= 0) {
     determineWinner({ player, enermy, timerId });
@@ -149,15 +180,22 @@ const animate = () => {
 animate();
 
 window.addEventListener("keydown", (event) => {
+  // console.log(event.key)
   switch (event.key) {
     case "ArrowUp":
-      player.velocity.y = -15;
+      if (player.velocity.y === 0) {
+        player.velocity.y = -13;
+      }
       break;
     case "ArrowRight":
-      player.velocity.x = 7;
+      keys.ArrowRight.pressed = true;
+      lastPressedKey = "ArrowRight";
+      lastPressedKey = event.key;
       break;
     case "ArrowLeft":
-      player.velocity.x = -7;
+      keys.ArrowLeft.pressed = true;
+      lastPressedKey = "ArrowLeft";
+      lastPressedKey = event.key;
       break;
     case " ":
       player.image = player.sprites.attack.image;
@@ -166,13 +204,21 @@ window.addEventListener("keydown", (event) => {
       player.gatling_attack();
       break;
   }
+
+  // lastPressedHandler = setTimeout(() => (lastPressedKey = ""), 500);
+  
 });
 
-window.addEventListener("keyup", (e) => {
-  if (e.key === "ArrowRight") {
-    player.velocity.x = 0;
+window.addEventListener("keyup", (event) => {
+  if (event.key === "ArrowUp") {
+    keys.ArrayUp.pressed = false;
   }
-  if (e.key === "ArrowLeft") {
-    player.velocity.x = 0;
+
+  if (event.key === "ArrowRight") {
+    keys.ArrowRight.pressed = false;
+  }
+
+  if (event.key === "ArrowLeft") {
+    keys.ArrowLeft.pressed = false;
   }
 });

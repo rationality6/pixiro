@@ -1,0 +1,4 @@
+
+class Mack extends Fighter {
+  
+}

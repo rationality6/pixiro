@@ -8,13 +8,14 @@ ctx.fillRect(0, 0, canvas.width, canvas.height);
 
 const gravity = 0.8;
 
-let timer = 30;
+let timer = 20;
+let game_ended = false;
 
 const stage = new DarkForest();
 
 const player = new Mack({
   position: { x: 100, y: 50 },
-  imageSrc: "./assets/samuraiMack/Idle.png"
+  imageSrc: "./assets/samuraiMack/Idle.png",
 });
 
 const enermy = new Kenji({ position: { x: 500, y: 50 } });
@@ -68,6 +69,8 @@ const determineWinner = ({ player, enermy, timerId }) => {
   if (player.hitpoint < enermy.hitpoint) {
     document.querySelector("#displayText").innerHTML = "Player 2 Wins";
   }
+
+  game_ended = true;
 };
 
 let timerId;
@@ -88,7 +91,9 @@ const decreseTime = () => {
   }
 
   if (timer === 0) {
-    determineWinner({ player, enermy, timerId });
+    if(game_ended === false){
+      determineWinner({ player, enermy, timerId });
+    }
   }
 };
 
@@ -121,17 +126,29 @@ const animate = () => {
 
   hit_detection();
 
+  if (player.isAttacking === false && player.velocity.y === 0) {
+    player.image.src = player.sprites.idle.image.src;
+    player.framesMax = player.sprites.idle.framesMax;
+  }
+
   player.velocity.x = 0;
   if (keys.ArrowRight.pressed && lastPressedKey === "ArrowRight") {
     player.velocity.x = 7;
+    player.image.src = player.sprites.run.image.src;
+    player.framesMax = player.sprites.run.framesMax;
   }
   if (keys.ArrowLeft.pressed && lastPressedKey === "ArrowLeft") {
     player.velocity.x = -7;
+    player.image.src = player.sprites.run.image.src;
+    player.framesMax = player.sprites.run.framesMax;
   }
 
   // end game based on health
   if (player.hitpoint <= 0 || enermy.hitpoint <= 0) {
-    determineWinner({ player, enermy, timerId });
+    if(game_ended === false){
+      determineWinner({ player, enermy, timerId });
+    }
+    
   }
 };
 
@@ -143,6 +160,9 @@ window.addEventListener("keydown", (event) => {
     case "ArrowUp":
       if (player.velocity.y === 0) {
         player.velocity.y = -13;
+        player.image.src = player.sprites.jump.image.src;
+        player.framesMax = player.sprites.jump.framesMax;
+        player.framesHold = 10;
       }
       break;
     case "ArrowRight":

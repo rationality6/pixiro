@@ -91,7 +91,7 @@ const decreseTime = () => {
   }
 
   if (timer === 0) {
-    if(game_ended === false){
+    if (game_ended === false) {
       determineWinner({ player, enermy, timerId });
     }
   }
@@ -127,28 +127,24 @@ const animate = () => {
   hit_detection();
 
   if (player.isAttacking === false && player.velocity.y === 0) {
-    player.image.src = player.sprites.idle.image.src;
-    player.framesMax = player.sprites.idle.framesMax;
+    player.switchSprite("idle");
   }
 
   player.velocity.x = 0;
   if (keys.ArrowRight.pressed && lastPressedKey === "ArrowRight") {
     player.velocity.x = 7;
-    player.image.src = player.sprites.run.image.src;
-    player.framesMax = player.sprites.run.framesMax;
+    player.switchSprite("run");
   }
   if (keys.ArrowLeft.pressed && lastPressedKey === "ArrowLeft") {
     player.velocity.x = -7;
-    player.image.src = player.sprites.run.image.src;
-    player.framesMax = player.sprites.run.framesMax;
+    player.switchSprite("run");
   }
 
   // end game based on health
   if (player.hitpoint <= 0 || enermy.hitpoint <= 0) {
-    if(game_ended === false){
+    if (game_ended === false) {
       determineWinner({ player, enermy, timerId });
     }
-    
   }
 };
 
@@ -160,9 +156,7 @@ window.addEventListener("keydown", (event) => {
     case "ArrowUp":
       if (player.velocity.y === 0) {
         player.velocity.y = -13;
-        player.image.src = player.sprites.jump.image.src;
-        player.framesMax = player.sprites.jump.framesMax;
-        player.framesHold = 10;
+        player.switchSprite("jump");
       }
       break;
     case "ArrowRight":
@@ -176,9 +170,6 @@ window.addEventListener("keydown", (event) => {
       lastPressedKey = event.key;
       break;
     case " ":
-      player.image.src = player.sprites.attack.image.src;
-      player.framesMax = player.sprites.attack.framesMax;
-      player.framesHold = 4;
       player.gatling_attack();
       break;
   }

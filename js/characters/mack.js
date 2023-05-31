@@ -24,12 +24,20 @@ class Mack extends Fighter {
         imageSrc: "./assets/samuraiMack/Jump.png",
         framesMax: 2,
       },
+      fall: {
+        imageSrc: "./assets/samuraiMack/Fall.png",
+        framesMax: 2,
+      },
       attack: {
         imageSrc: "./assets/samuraiMack/Attack1.png",
         framesMax: 6,
       },
       attack2: {
         imageSrc: "./assets/samuraiMack/Attack2.png",
+        framesMax: 6,
+      },
+      death: {
+        imageSrc: "./assets/samuraiMack/Death.png",
         framesMax: 6,
       },
     };
@@ -47,6 +55,9 @@ class Mack extends Fighter {
       this.gatling_count += 1;
       clearTimeout(this.gatlingTimeoutHandler);
       // console.log("clear gatling attack start");
+
+      this.switchSprite("attack2");
+
       this.gatlingTimeoutHandler = setTimeout(() => {
         // console.log(`gatling attack end ${this.gatling_count}}`);
         this.gatlingStart = false;
@@ -57,6 +68,8 @@ class Mack extends Fighter {
       this.gatlingStart = true;
       this.gatling_count += 1;
       // console.log("gatling attack start");
+
+      this.switchSprite("attack");
 
       this.gatlingTimeoutHandler = setTimeout(() => {
         this.gatlingStart = false;

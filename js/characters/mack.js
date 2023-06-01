@@ -10,6 +10,8 @@ class Mack extends Fighter {
     this.height = 140;
     this.width = 70;
 
+    this.framesCurrent = 0
+
     // sprites
     this.sprites = {
       idle: {
@@ -44,38 +46,8 @@ class Mack extends Fighter {
     this.mapping_sprites();
   }
 
-  attack() {
-    this.isAttacking = true;
-    setTimeout(() => (this.isAttacking = false), 500);
-  }
-
-  gatling_attack() {
-    if (this.gatlingStart == true) {
-      this.attack();
-      this.gatling_count += 1;
-      clearTimeout(this.gatlingTimeoutHandler);
-      // console.log("clear gatling attack start");
-
-      this.switchSprite("attack2");
-
-      this.gatlingTimeoutHandler = setTimeout(() => {
-        // console.log(`gatling attack end ${this.gatling_count}}`);
-        this.gatlingStart = false;
-        this.gatling_count = 0;
-      }, 1000);
-    } else {
-      this.attack();
-      this.gatlingStart = true;
-      this.gatling_count += 1;
-      // console.log("gatling attack start");
-
-      this.switchSprite("attack");
-
-      this.gatlingTimeoutHandler = setTimeout(() => {
-        this.gatlingStart = false;
-        this.gatling_count = 0;
-        // console.log("gatling attack end");
-      }, 1000);
-    }
+  specialAttack() {
+    console.log("special")
+    this.switchSprite("specialAttack");
   }
 }

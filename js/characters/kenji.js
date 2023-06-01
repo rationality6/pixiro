@@ -6,7 +6,27 @@ class Kenji extends Fighter {
     this.framesMax = 4;
     this.scale = 2.5;
     this.offset = { x: 215, y: 169 };
-    
+
+    this.sprites = {
+      idle: {
+        imageSrc: "./assets/kenji/Idle.png",
+        framesMax: 8,
+      },
+      death: {
+        imageSrc: "./assets/kenji/Death.png",
+        framesMax: 7,
+      },
+    };
+
     this.mapping_sprites();
+
+    this.botAttack();
+  }
+
+  botAttack() {
+    setTimeout(() => {
+      this.setAttackBox()
+      this.botAttack();
+    }, 1000);
   }
 }

@@ -15,21 +15,16 @@ class Fighter extends Sprite {
       framesMax,
       offset,
     });
+
+    // default state
     this.hitpoint = 100;
-    this.velocity = velocity;
     this.height = 150;
     this.width = 50;
 
-    this.attackBox = {
-      position: {
-        x: this.position.x,
-        y: this.position.y,
-      },
-      width: 260,
-      height: 160,
-    };
+    this.velocity = velocity;
 
     this.isAttacking = false;
+    this.attackingAnimationStart = false;
 
     // animation
     this.framesCurrent = 0;
@@ -54,17 +49,7 @@ class Fighter extends Sprite {
   }
 
   update() {
-    // attack box
-    if (this.isAttacking) {
-      ctx.strokeStyle = "green";
-      ctx.lineWidth = 2;
-      ctx.strokeRect(
-        this.attackBox.position.x,
-        this.attackBox.position.y,
-        this.attackBox.width,
-        this.attackBox.height
-      );
-    }
+    this.setAttackBox({ x: 50, y: 100 }, { height: 100, width: 100 }, 200);
 
     // body box
     ctx.strokeStyle = "red";
@@ -85,15 +70,21 @@ class Fighter extends Sprite {
     ctx.font = "20px Arial";
     ctx.fillText(`HP: ${this.hitpoint}`, this.position.x, this.position.y - 10);
 
+    // moving
     this.position.x += this.velocity.x;
     this.position.y += this.velocity.y;
-    this.attackBox.position.x = this.position.x;
-    this.attackBox.position.y = this.position.y;
 
     this.floor_collision_detection_and_gravity();
     this.wall_collision_detection();
     this.draw();
     this.animateFrame();
+  }
+
+  setActionDelay(msecond) {
+    this.velocity.x = 0;
+    this.velocity.y = 0;
+    this.middleOfActionDelay = true;
+    setTimeout(() => (this.middleOfActionDelay = false), msecond);
   }
 
   floor_collision_detection_and_gravity() {
@@ -120,31 +111,98 @@ class Fighter extends Sprite {
     }
   }
 
+  attack(delay) {
+    this.setActionDelay(delay);
+    this.isAttacking = true;
+    setTimeout(() => (this.isAttacking = false), delay);
+    this.attackingAnimationStart = true;
+  }
+
+  gatling_attack() {
+    if (this.gatlingStart == true) {
+      this.attack(500);
+      this.gatling_count += 1;
+      clearTimeout(this.gatlingTimeoutHandler);
+      // console.log("clear gatling attack start");
+
+      this.switchSprite("attack2");
+
+      this.gatlingTimeoutHandler = setTimeout(() => {
+        // console.log(`gatling attack end ${this.gatling_count}}`);
+        this.gatlingStart = false;
+        this.gatling_count = 0;
+      }, 500);
+    } else {
+      this.attack(500);
+      this.gatlingStart = true;
+      this.gatling_count += 1;
+      // console.log("gatling attack start");
+
+      this.switchSprite("attack");
+
+      this.gatlingTimeoutHandler = setTimeout(() => {
+        this.gatlingStart = false;
+        this.gatling_count = 0;
+        // console.log("gatling attack end");
+      }, 500);
+    }
+  }
+
+  setAttackBox(posision, size, delay) {
+    if (!this.isAttacking) return;
+
+    ctx.strokeStyle = "green";
+    ctx.lineWidth = 2;
+    ctx.strokeRect(
+      posision.x + this.position.x,
+      posision.y + this.position.y,
+      size.height,
+      size.width
+    );
+  }
+
   switchSprite(sprite) {
     if (sprite === "idle") {
-      this.image.src = this.sprites.idle.image.src;
-      this.framesMax = this.sprites.idle.framesMax;
-      this.framesHold = 5;
+      if (this.image !== this.sprites.idle.image) {
+        this.image.src = this.sprites.idle.image.src;
+        this.framesMax = this.sprites.idle.framesMax;
+        this.framesHold = 5;
+      }
     }
     if (sprite === "run") {
-      this.image.src = this.sprites.run.image.src;
-      this.framesMax = this.sprites.run.framesMax;
+      if (this.image !== this.sprites.run.image) {
+        this.image.src = this.sprites.run.image.src;
+        this.framesMax = this.sprites.run.framesMax;
+      }
     }
     if (sprite === "jump") {
       this.image.src = this.sprites.jump.image.src;
       this.framesMax = this.sprites.jump.framesMax;
+      this.framesCurrent = 0;
     }
     if (sprite === "fall") {
       this.image.src = this.sprites.fall.image.src;
       this.framesMax = this.sprites.fall.framesMax;
+      this.framesCurrent = 0;
     }
     if (sprite === "attack") {
-      this.image.src = this.sprites.attack.image.src;
-      this.framesMax = this.sprites.attack.framesMax;
+      if (this.image !== this.sprites.attack.image) {
+        this.image.src = this.sprites.attack.image.src;
+        this.framesMax = this.sprites.attack.framesMax;
+        this.framesCurrent = 0;
+      }
     }
     if (sprite === "attack2") {
-      this.image.src = this.sprites.attack2.image.src;
-      this.framesMax = this.sprites.attack2.framesMax;
+      if (this.image !== this.sprites.attack2.image) {
+        this.image.src = this.sprites.attack2.image.src;
+        this.framesMax = this.sprites.attack2.framesMax;
+        this.framesCurrent = 0;
+      }
+    }
+    if (sprite === "death") {
+      this.image.src = this.sprites.death.image.src;
+      this.framesMax = this.sprites.death.framesMax;
+      this.framesCurrent = 0;
     }
   }
 }

@@ -22,10 +22,10 @@ const enermy = new Kenji({ position: { x: 500, y: 50 } });
 
 const reactangularCollisionDetection = ({ rect1, rect2 }) => {
   return (
-    rect1.attackBox.position.x + rect1.attackBox.width >= rect2.position.x &&
-    rect1.attackBox.position.x <= rect2.position.x + rect2.width &&
-    rect1.attackBox.position.y + rect1.attackBox.height >= rect2.position.y &&
-    rect1.attackBox.position.y <= rect2.position.y + rect2.height
+    rect1.position.x + rect1.width >= rect2.position.x &&
+    rect1.position.x <= rect2.position.x + rect2.width &&
+    rect1.position.y + rect1.height >= rect2.position.y &&
+    rect1.position.y <= rect2.position.y + rect2.height
   );
 };
 
@@ -65,9 +65,11 @@ const determineWinner = ({ player, enermy, timerId }) => {
   }
   if (player.hitpoint > enermy.hitpoint) {
     document.querySelector("#displayText").innerHTML = "Player 1 Wins";
+    enermy.switchSprite("death");
   }
   if (player.hitpoint < enermy.hitpoint) {
     document.querySelector("#displayText").innerHTML = "Player 2 Wins";
+    player.switchSprite("death");
   }
 
   game_ended = true;
@@ -130,14 +132,21 @@ const animate = () => {
     player.switchSprite("idle");
   }
 
-  player.velocity.x = 0;
+  if (player.velocity.y < 0) {
+    player.switchSprite("jump");
+  }
+  if (player.velocity.y > 0) {
+    player.switchSprite("fall");
+  }
+
   if (keys.ArrowRight.pressed && lastPressedKey === "ArrowRight") {
     player.velocity.x = 7;
     player.switchSprite("run");
-  }
-  if (keys.ArrowLeft.pressed && lastPressedKey === "ArrowLeft") {
+  }else if (keys.ArrowLeft.pressed && lastPressedKey === "ArrowLeft") {
     player.velocity.x = -7;
     player.switchSprite("run");
+  } else {
+    player.velocity.x = 0;
   }
 
   // end game based on health
@@ -151,6 +160,9 @@ const animate = () => {
 animate();
 
 window.addEventListener("keydown", (event) => {
+  if (player.middleOfActionDelay) {
+    return;
+  }
   // console.log(event.key)
   switch (event.key) {
     case "ArrowUp":

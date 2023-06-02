@@ -5,7 +5,9 @@ class Kenji extends Fighter {
     this.velocity = { x: 0, y: 0 };
     this.framesMax = 4;
     this.scale = 2.5;
-    this.offset = { x: 215, y: 169 };
+    this.offset = { x: 215, y: 180 };
+
+    this.height = 140
 
     this.sprites = {
       idle: {
@@ -18,14 +20,14 @@ class Kenji extends Fighter {
       },
     };
 
-    this.mapping_sprites();
+    this.mappingSprites();
 
     this.botAttack();
   }
 
   botAttack() {
     setTimeout(() => {
-      this.setAttackBox()
+      // this.setAttackBox()
       this.botAttack();
     }, 1000);
   }

@@ -9,7 +9,7 @@ ctx.fillRect(0, 0, canvas.width, canvas.height);
 const gravity = 0.8;
 
 let timer = 20;
-let game_ended = false;
+let isGameEnded = false;
 
 const stage = new DarkForest();
 
@@ -20,33 +20,7 @@ const player = new Mack({
 
 const enermy = new Kenji({ position: { x: 500, y: 50 } });
 
-const reactangularCollisionDetection = ({ rect1, rect2 }) => {
-  return (
-    rect1.position.x + rect1.width >= rect2.position.x &&
-    rect1.position.x <= rect2.position.x + rect2.width &&
-    rect1.position.y + rect1.height >= rect2.position.y &&
-    rect1.position.y <= rect2.position.y + rect2.height
-  );
-};
-
-const hit_detection = () => {
-  if (
-    reactangularCollisionDetection({ rect1: player, rect2: enermy }) &&
-    player.isAttacking
-  ) {
-    player.playSoundHit();
-    enermy.hitpoint -= 15;
-    document.querySelector(
-      "#enermyHealth"
-    ).style.width = `${enermy.hitpoint}px`;
-    player.isAttacking = false;
-  } else if (player.isAttacking) {
-  } else {
-    player.isAttacking = false;
-  }
-};
-
-const object_collision_detection = ({ player, enermy }) => {
+const objectCollisionDetection = ({ player, enermy }) => {
   // right side collision
   if (player.position.x + player.width >= enermy.position.x) {
     player.velocity.x = 0;
@@ -72,7 +46,7 @@ const determineWinner = ({ player, enermy, timerId }) => {
     player.switchSprite("death");
   }
 
-  game_ended = true;
+  isGameEnded = true;
 };
 
 let timerId;
@@ -93,7 +67,7 @@ const decreseTime = () => {
   }
 
   if (timer === 0) {
-    if (game_ended === false) {
+    if (isGameEnded === false) {
       determineWinner({ player, enermy, timerId });
     }
   }
@@ -124,9 +98,7 @@ const animate = () => {
   player.update();
   enermy.update();
 
-  object_collision_detection({ player, enermy });
-
-  hit_detection();
+  objectCollisionDetection({ player, enermy });
 
   if (player.isAttacking === false && player.velocity.y === 0) {
     player.switchSprite("idle");
@@ -151,7 +123,7 @@ const animate = () => {
 
   // end game based on health
   if (player.hitpoint <= 0 || enermy.hitpoint <= 0) {
-    if (game_ended === false) {
+    if (isGameEnded === false) {
       determineWinner({ player, enermy, timerId });
     }
   }
@@ -182,7 +154,7 @@ window.addEventListener("keydown", (event) => {
       lastPressedKey = event.key;
       break;
     case " ":
-      player.gatling_attack();
+      player.gatlingAttack();
       break;
   }
 

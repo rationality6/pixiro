@@ -33,7 +33,9 @@ class Sprite {
     );
   }
 
-  animateFrame() {
+  animateFrame(animationLoop = true) {
+    if (this.framesMax - 1 <= this.framesCurrent && !animationLoop) return;
+
     this.framesElapsed += 1;
     if (this.framesElapsed % this.framesHold === 0) {
       if (this.framesCurrent < this.framesMax - 1) {

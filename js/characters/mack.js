@@ -43,11 +43,6 @@ class Mack extends Fighter {
         framesMax: 6,
       },
     };
-    this.mapping_sprites();
-  }
-
-  specialAttack() {
-    console.log("special")
-    this.switchSprite("specialAttack");
+    this.mappingSprites();
   }
 }

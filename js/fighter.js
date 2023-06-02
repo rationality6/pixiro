@@ -24,7 +24,6 @@ class Fighter extends Sprite {
     this.velocity = velocity;
 
     this.isAttacking = false;
-    this.attackingAnimationStart = false;
 
     // animation
     this.framesCurrent = 0;
@@ -38,20 +37,17 @@ class Fighter extends Sprite {
 
     // sprites
     this.sprites = sprites;
-    this.mapping_sprites();
+    this.mappingSprites();
   }
 
-  mapping_sprites() {
+  mappingSprites() {
     for (const sprite in this.sprites) {
       this.sprites[sprite].image = new Image();
       this.sprites[sprite].image.src = this.sprites[sprite].imageSrc;
     }
   }
 
-  update() {
-    this.setAttackBox({ x: 50, y: 100 }, { height: 100, width: 100 }, 200);
-
-    // body box
+  drawBodyBox() {
     ctx.strokeStyle = "red";
     ctx.lineWidth = 2;
     ctx.strokeRect(this.position.x, this.position.y, this.width, this.height);
@@ -64,18 +60,71 @@ class Fighter extends Sprite {
       this.width + 1,
       this.height + 1
     );
+  }
 
-    // hitpoint
+  drawHitPoint() {
     ctx.fillStyle = "white";
     ctx.font = "20px Arial";
     ctx.fillText(`HP: ${this.hitpoint}`, this.position.x, this.position.y - 10);
+  }
+
+  reactangularCollisionDetection({ attackBox, enermy }) {
+    const x = this.position.x + attackBox.position.x
+    const y = this.position.y + attackBox.position.y
+
+    return (
+      x + attackBox.area.width >= enermy.position.x &&
+      x <= enermy.position.x + enermy.width &&
+      y + attackBox.area.height >= enermy.position.y &&
+      y <= enermy.position.y + enermy.height
+    );
+  }
+
+  hitDetection({ attackBox }) {
+    if (
+      this.reactangularCollisionDetection({
+        attackBox: attackBox,
+        enermy: enermy,
+      }) &&
+      player.isAttacking
+    ) {
+      player.playSoundHit();
+      enermy.hitpoint -= 15;
+      document.querySelector(
+        "#enermyHealth"
+      ).style.width = `${enermy.hitpoint}px`;
+      player.isAttacking = false;
+    } else if (player.isAttacking) {
+    } else {
+      player.isAttacking = false;
+    }
+  }
+
+  update() {
+    const basicAttack = {
+      position: { x: 20, y: -20 },
+      area: { height: 150, width: 230 },
+    };
+
+    this.setAttackBox({
+      position: basicAttack.position,
+      area: basicAttack.area,
+    });
+
+    this.hitDetection({ attackBox: basicAttack });
+
+    // body box
+    this.drawBodyBox();
+
+    // hitpoint
+    this.drawHitPoint();
 
     // moving
     this.position.x += this.velocity.x;
     this.position.y += this.velocity.y;
 
-    this.floor_collision_detection_and_gravity();
-    this.wall_collision_detection();
+    this.floorCollisionDetectionAndGravity();
+    this.wallCollisionDetection();
     this.draw();
     this.animateFrame();
   }
@@ -87,19 +136,20 @@ class Fighter extends Sprite {
     setTimeout(() => (this.middleOfActionDelay = false), msecond);
   }
 
-  floor_collision_detection_and_gravity() {
+  floorCollisionDetectionAndGravity() {
     const ground = 60;
     if (
       this.position.y + this.height + this.velocity.y >=
       canvas.height - ground
     ) {
       this.velocity.y = 0;
+      this.position.y = 160;
     } else {
       this.velocity.y += gravity;
     }
   }
 
-  wall_collision_detection() {
+  wallCollisionDetection() {
     // right side
     if (this.position.x + this.width >= canvas.width) {
       this.position.x = canvas.width - this.width;
@@ -115,10 +165,9 @@ class Fighter extends Sprite {
     this.setActionDelay(delay);
     this.isAttacking = true;
     setTimeout(() => (this.isAttacking = false), delay);
-    this.attackingAnimationStart = true;
   }
 
-  gatling_attack() {
+  gatlingAttack() {
     if (this.gatlingStart == true) {
       this.attack(500);
       this.gatling_count += 1;
@@ -148,16 +197,16 @@ class Fighter extends Sprite {
     }
   }
 
-  setAttackBox(posision, size, delay) {
+  setAttackBox({ position, area }) {
     if (!this.isAttacking) return;
 
     ctx.strokeStyle = "green";
     ctx.lineWidth = 2;
     ctx.strokeRect(
-      posision.x + this.position.x,
-      posision.y + this.position.y,
-      size.height,
-      size.width
+      position.x + this.position.x,
+      position.y + this.position.y,
+      area.width,
+      area.height
     );
   }
 

@@ -53,6 +53,14 @@ class BoxBucket {
     ];
   }
 
+  enableAttack({ name, delay }) {
+    this.bucket.forEach((item) => {
+      if(item.name === name){
+        item.enable = true
+      }
+    });
+  }
+
   updatePositions({ object }) {
     this.bucket.forEach((bucketItem) => {
       bucketItem.updatePosition({ object });

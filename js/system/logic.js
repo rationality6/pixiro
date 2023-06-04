@@ -52,13 +52,12 @@ const sensor = new Sensor();
 const stage = new DarkForest();
 
 // player
-const player = new Mack({
-  position: { x: 100, y: 50 },
-  imageSrc: "./assets/samuraiMack/Idle.png",
-});
+const playerOneStartPosition = { x: 100, y: 50 };
+const player = new Mack({ position: playerOneStartPosition });
 
 // enermy
-const enermy = new Kenji({ position: { x: 500, y: 50 } });
+const playerTwoStartPosition = { x: 500, y: 50 };
+const enermy = new Kenji({ position: playerTwoStartPosition });
 
 // result
 const determineWinner = ({ player, enermy, timerId }) => {
@@ -119,7 +118,6 @@ const objectCollisionDetection = ({ player, enermy }) => {
 // input
 
 let lastPressedKey;
-let lastPressedHandler;
 
 const keys = {
   ArrayUp: {
@@ -219,7 +217,6 @@ window.addEventListener("keydown", (event) => {
       break;
   }
 
-  // lastPressedHandler = setTimeout(() => (lastPressedKey = ""), 500);
 });
 
 window.addEventListener("keyup", (event) => {

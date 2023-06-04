@@ -7,16 +7,28 @@ class Kenji extends Fighter {
     this.scale = 2.5;
     this.offset = { x: 215, y: 180 };
 
-    this.height = 140
+    this.height = 140;
 
     this.sprites = {
       idle: {
         imageSrc: "./assets/kenji/Idle.png",
-        framesMax: 8,
+        framesMax: 4,
       },
       death: {
         imageSrc: "./assets/kenji/Death.png",
         framesMax: 7,
+      },
+      fall: {
+        imageSrc: "./assets/kenji/Fall.png",
+        framesMax: 2,
+      },
+      attack: {
+        imageSrc: "./assets/kenji/Attack1.png",
+        framesMax: 4,
+      },
+      takeHit: {
+        imageSrc: "./assets/kenji/Take hit.png",
+        framesMax: 3,
       },
     };
 
@@ -27,8 +39,17 @@ class Kenji extends Fighter {
 
   botAttack() {
     setTimeout(() => {
-      // this.setAttackBox()
+      this.attack(300);
+      this.switchSprite("attack");
       this.botAttack();
     }, 1000);
+  }
+
+  update() {
+    super.update();
+    this.setAttackBox({
+      position: { x: -190, y: -10 },
+      area: { width: 200, height: 170 },
+    });
   }
 }

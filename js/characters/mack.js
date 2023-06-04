@@ -42,6 +42,10 @@ class Mack extends Fighter {
         imageSrc: "./assets/samuraiMack/Death.png",
         framesMax: 6,
       },
+      takeHit: {
+        imageSrc: "./assets/samuraiMack/Take Hit.png",
+        framesMax: 4,
+      },
     };
     this.mappingSprites();
   }

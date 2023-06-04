@@ -1,5 +1,52 @@
+class Sensor {
+  reactangularCollisionDetection({ attackBox, enermy }) {
+    const x = player.position.x + attackBox.position.x;
+    const y = player.position.y + attackBox.position.y;
+
+    return (
+      x + attackBox.area.width >= enermy.position.x &&
+      x <= enermy.position.x + enermy.width &&
+      y + attackBox.area.height >= enermy.position.y &&
+      y <= enermy.position.y + enermy.height
+    );
+  }
+
+  hitDetection({ attackBox }) {
+    if (
+      this.reactangularCollisionDetection({
+        attackBox: attackBox,
+        enermy: enermy,
+      }) &&
+      player.isAttacking
+    ) {
+      player.playSoundHit();
+      enermy.hitpoint -= 15;
+      document.querySelector(
+        "#enermyHealth"
+      ).style.width = `${enermy.hitpoint}px`;
+      player.isAttacking = false;
+    } else if (player.isAttacking) {
+    } else {
+      player.isAttacking = false;
+    }
+  }
+}
+
+// games
 const canvas = document.getElementById("canvas");
 const ctx = canvas.getContext("2d");
+
+let sound = new Howl({
+  html5: true,
+  src: ["./assets/sounds/diskstation_bgm.mp3"],
+});
+let musicStarted = false;
+
+// document.querySelector("body").addEventListener("click", () => {
+//   if (musicStarted) return;
+//   sound.play();
+//   musicStarted = true;
+// });
 
 canvas.width = 640;
 canvas.height = 360;
@@ -11,27 +58,23 @@ const gravity = 0.8;
 let timer = 20;
 let isGameEnded = false;
 
+const sensor = new Sensor();
+
+const boxBucket = new BoxBucket()
+
+// stage
 const stage = new DarkForest();
 
+// player
 const player = new Mack({
   position: { x: 100, y: 50 },
   imageSrc: "./assets/samuraiMack/Idle.png",
 });
 
+// enermy
 const enermy = new Kenji({ position: { x: 500, y: 50 } });
 
-const objectCollisionDetection = ({ player, enermy }) => {
-  // right side collision
-  if (player.position.x + player.width >= enermy.position.x) {
-    player.velocity.x = 0;
-  }
-
-  // // left side
-  // if (player.position.x <= 0) {
-  //   player.position.x = 0
-  // }
-};
-
+// result
 const determineWinner = ({ player, enermy, timerId }) => {
   clearTimeout(timerId);
   if (player.hitpoint === enermy.hitpoint) {
@@ -49,6 +92,7 @@ const determineWinner = ({ player, enermy, timerId }) => {
   isGameEnded = true;
 };
 
+// time
 let timerId;
 
 const decreseTime = () => {
@@ -72,6 +116,21 @@ const decreseTime = () => {
     }
   }
 };
+
+// collisions
+const objectCollisionDetection = ({ player, enermy }) => {
+  // right side collision
+  if (player.position.x + player.width >= enermy.position.x) {
+    player.velocity.x = 0;
+  }
+
+  // // left side
+  // if (player.position.x <= 0) {
+  //   player.position.x = 0
+  // }
+};
+
+// input
 
 let lastPressedKey;
 let lastPressedHandler;
@@ -98,10 +157,26 @@ const animate = () => {
   player.update();
   enermy.update();
 
+  sensor.hitDetection({ attackBox: player.basicAttack });
+
+  boxBucket.renderAll()
+  boxBucket.bucket.forEach((item) => {
+    if (item.enable === false) {
+      item.enable = true;
+      setTimeout(() => {
+        item.enable = false;
+      }, 1000);
+    }
+  });
+
   objectCollisionDetection({ player, enermy });
 
   if (player.isAttacking === false && player.velocity.y === 0) {
     player.switchSprite("idle");
+  }
+
+  if (enermy.isAttacking === false && enermy.velocity.y === 0) {
+    enermy.switchSprite("idle");
   }
 
   if (player.velocity.y < 0) {
@@ -114,7 +189,7 @@ const animate = () => {
   if (keys.ArrowRight.pressed && lastPressedKey === "ArrowRight") {
     player.velocity.x = 7;
     player.switchSprite("run");
-  }else if (keys.ArrowLeft.pressed && lastPressedKey === "ArrowLeft") {
+  } else if (keys.ArrowLeft.pressed && lastPressedKey === "ArrowLeft") {
     player.velocity.x = -7;
     player.switchSprite("run");
   } else {

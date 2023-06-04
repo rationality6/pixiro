@@ -30,6 +30,11 @@ class Fighter extends Sprite {
     this.framesElapsed = 0;
     this.framesHold = 5;
 
+    this.basicAttack = {
+      position: { x: 20, y: -20 },
+      area: { height: 150, width: 230 },
+    };
+
     // gatling
     this.gatling_count = 0;
     this.gatlingStart = false;
@@ -68,50 +73,11 @@ class Fighter extends Sprite {
     ctx.fillText(`HP: ${this.hitpoint}`, this.position.x, this.position.y - 10);
   }
 
-  reactangularCollisionDetection({ attackBox, enermy }) {
-    const x = this.position.x + attackBox.position.x
-    const y = this.position.y + attackBox.position.y
-
-    return (
-      x + attackBox.area.width >= enermy.position.x &&
-      x <= enermy.position.x + enermy.width &&
-      y + attackBox.area.height >= enermy.position.y &&
-      y <= enermy.position.y + enermy.height
-    );
-  }
-
-  hitDetection({ attackBox }) {
-    if (
-      this.reactangularCollisionDetection({
-        attackBox: attackBox,
-        enermy: enermy,
-      }) &&
-      player.isAttacking
-    ) {
-      player.playSoundHit();
-      enermy.hitpoint -= 15;
-      document.querySelector(
-        "#enermyHealth"
-      ).style.width = `${enermy.hitpoint}px`;
-      player.isAttacking = false;
-    } else if (player.isAttacking) {
-    } else {
-      player.isAttacking = false;
-    }
-  }
-
   update() {
-    const basicAttack = {
-      position: { x: 20, y: -20 },
-      area: { height: 150, width: 230 },
-    };
-
     this.setAttackBox({
-      position: basicAttack.position,
-      area: basicAttack.area,
+      position: this.basicAttack.position,
+      area: this.basicAttack.area,
     });
-
-    this.hitDetection({ attackBox: basicAttack });
 
     // body box
     this.drawBodyBox();
@@ -169,7 +135,7 @@ class Fighter extends Sprite {
 
   gatlingAttack() {
     if (this.gatlingStart == true) {
-      this.attack(500);
+      this.attack(400);
       this.gatling_count += 1;
       clearTimeout(this.gatlingTimeoutHandler);
       // console.log("clear gatling attack start");
@@ -182,7 +148,7 @@ class Fighter extends Sprite {
         this.gatling_count = 0;
       }, 500);
     } else {
-      this.attack(500);
+      this.attack(400);
       this.gatlingStart = true;
       this.gatling_count += 1;
       // console.log("gatling attack start");
@@ -211,6 +177,12 @@ class Fighter extends Sprite {
   }
 
   switchSprite(sprite) {
+    if (
+      this.image === this.sprites.attack.image &&
+      this.framesCurrent < this.sprite.attack.framesMax - 1
+    )
+      return;
+
     if (sprite === "idle") {
       if (this.image !== this.sprites.idle.image) {
         this.image.src = this.sprites.idle.image.src;

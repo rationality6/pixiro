@@ -36,18 +36,6 @@ class Sensor {
 const canvas = document.getElementById("canvas");
 const ctx = canvas.getContext("2d");
 
-let sound = new Howl({
-  html5: true,
-  src: ["./assets/sounds/diskstation_bgm.mp3"],
-});
-let musicStarted = false;
-
-// document.querySelector("body").addEventListener("click", () => {
-//   if (musicStarted) return;
-//   sound.play();
-//   musicStarted = true;
-// });
-
 canvas.width = 640;
 canvas.height = 360;
 
@@ -59,8 +47,6 @@ let timer = 20;
 let isGameEnded = false;
 
 const sensor = new Sensor();
-
-const boxBucket = new BoxBucket()
 
 // stage
 const stage = new DarkForest();
@@ -152,20 +138,20 @@ decreseTime();
 const animate = () => {
   window.requestAnimationFrame(animate);
 
-  stage.update_stage();
+  stage.render();
 
   player.update();
   enermy.update();
 
   sensor.hitDetection({ attackBox: player.basicAttack });
 
-  boxBucket.renderAll()
-  boxBucket.bucket.forEach((item) => {
+  player.boxBucket.renderAll({ object: player });
+  player.boxBucket.bucket.forEach((item) => {
     if (item.enable === false) {
       item.enable = true;
       setTimeout(() => {
         item.enable = false;
-      }, 1000);
+      }, 500);
     }
   });
 

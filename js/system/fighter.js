@@ -43,6 +43,8 @@ class Fighter extends Sprite {
     // sprites
     this.sprites = sprites;
     this.mappingSprites();
+
+    this.boxBucket = new BoxBucket();
   }
 
   mappingSprites() {

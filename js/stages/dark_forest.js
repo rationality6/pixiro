@@ -16,7 +16,7 @@ class DarkForest {
     });
   }
 
-  update_stage() {
+  render() {
     this.background.update();
     this.shop.update();
   }

@@ -22,6 +22,11 @@ class AttackBox {
     this.setTimeoutHandlers = setTimeoutHandlers;
   }
 
+  updatePosition({ object }) {
+    this.position.x = object.position.x;
+    this.position.y = object.position.y;
+  }
+
   render() {
     if (!this.enable) return;
 
@@ -48,9 +53,17 @@ class BoxBucket {
     ];
   }
 
-  renderAll() {
-    this.bucket.forEach((item) => {
-      item.render();
+  updatePositions({ object }) {
+    this.bucket.forEach((bucketItem) => {
+      bucketItem.updatePosition({ object });
+    });
+  }
+
+  renderAll({ object }) {
+    this.updatePositions({ object: object });
+
+    this.bucket.forEach((bucketItem) => {
+      bucketItem.render();
     });
   }
 }

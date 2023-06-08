@@ -1,5 +1,5 @@
 class Sensor {
-  reactangularCollisionDetection({ attackBox, enermy }) {
+  reactangularCollisionDetection({ attackBox, player, enermy }) {
     const x = player.position.x + attackBox.position.x;
     const y = player.position.y + attackBox.position.y;
 
@@ -11,10 +11,17 @@ class Sensor {
     );
   }
 
+  checkAllHitDetection() {
+    player.boxBucket.bucket.forEach((item) => {
+      this.hitDetection({ attackBox: item });
+    });
+  }
+
   hitDetection({ attackBox }) {
     if (
       this.reactangularCollisionDetection({
         attackBox: attackBox,
+        player: player,
         enermy: enermy,
       }) &&
       player.isAttacking
@@ -29,8 +36,31 @@ class Sensor {
     } else {
       player.isAttacking = false;
     }
+
+    if (
+      this.reactangularCollisionDetection({
+        player: enermy,
+        attackBox: attackBox,
+        enermy: player,
+      }) &&
+      enermy.isAttacking
+    ) {
+      enermy.playSoundHit();
+      player.hitpoint -= 15;
+      document.querySelector(
+        "#enermyHealth"
+      ).style.width = `${player.hitpoint}px`;
+      enermy.isAttacking = false;
+    } else if (enermy.isAttacking) {
+    } else {
+      enermy.isAttacking = false;
+    }
   }
 }
+
+const setDelay = (delayInms) => {
+  return new Promise((resolve) => setTimeout(resolve, delayInms));
+};
 
 // games
 const canvas = document.getElementById("canvas");
@@ -44,6 +74,8 @@ ctx.fillRect(0, 0, canvas.width, canvas.height);
 const gravity = 0.8;
 
 let timer = 20;
+let timerId;
+
 let isGameEnded = false;
 
 const sensor = new Sensor();
@@ -76,9 +108,6 @@ const determineWinner = ({ player, enermy, timerId }) => {
 
   isGameEnded = true;
 };
-
-// time
-let timerId;
 
 const decreseTime = () => {
   if (timer) {
@@ -141,17 +170,10 @@ const animate = () => {
   player.update();
   enermy.update();
 
-  sensor.hitDetection({ attackBox: player.basicAttack });
+  sensor.checkAllHitDetection();
 
   player.boxBucket.renderAll({ object: player });
-  player.boxBucket.bucket.forEach((item) => {
-    if (item.enable === false) {
-      item.enable = true;
-      setTimeout(() => {
-        item.enable = false;
-      }, 500);
-    }
-  });
+  enermy.boxBucket.renderAll({ object: enermy });
 
   objectCollisionDetection({ player, enermy });
 
@@ -194,7 +216,7 @@ window.addEventListener("keydown", (event) => {
   if (player.middleOfActionDelay) {
     return;
   }
-  // console.log(event.key)
+
   switch (event.key) {
     case "ArrowUp":
       if (player.velocity.y === 0) {
@@ -213,10 +235,15 @@ window.addEventListener("keydown", (event) => {
       lastPressedKey = event.key;
       break;
     case " ":
-      player.gatlingAttack();
+      // player.boxBucket.enableAttack({ name: "basic_attack" });
+      player.attack();
+      // player.gatlingAttack();
+      break;
+    case "ArrowDown":
+      player.switchSprite("guard");
+      console.log("guard");
       break;
   }
-
 });
 
 window.addEventListener("keyup", (event) => {

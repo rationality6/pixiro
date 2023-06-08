@@ -29,12 +29,7 @@ class Fighter extends Sprite {
     this.framesCurrent = 0;
     this.framesElapsed = 0;
     this.framesHold = 5;
-
-    this.basicAttack = {
-      position: { x: 20, y: -20 },
-      area: { height: 150, width: 230 },
-    };
-
+    
     // gatling
     this.gatling_count = 0;
     this.gatlingStart = false;
@@ -76,11 +71,6 @@ class Fighter extends Sprite {
   }
 
   update() {
-    this.setAttackBox({
-      position: this.basicAttack.position,
-      area: this.basicAttack.area,
-    });
-
     // body box
     this.drawBodyBox();
 
@@ -129,10 +119,11 @@ class Fighter extends Sprite {
     }
   }
 
-  attack(delay) {
+  async attack(delay) {
     this.setActionDelay(delay);
     this.isAttacking = true;
-    setTimeout(() => (this.isAttacking = false), delay);
+    await setDelay(delay)
+    this.isAttacking = false
   }
 
   gatlingAttack() {
@@ -163,19 +154,6 @@ class Fighter extends Sprite {
         // console.log("gatling attack end");
       }, 500);
     }
-  }
-
-  setAttackBox({ position, area }) {
-    if (!this.isAttacking) return;
-
-    ctx.strokeStyle = "green";
-    ctx.lineWidth = 2;
-    ctx.strokeRect(
-      position.x + this.position.x,
-      position.y + this.position.y,
-      area.width,
-      area.height
-    );
   }
 
   switchSprite(sprite) {
@@ -216,6 +194,13 @@ class Fighter extends Sprite {
       }
     }
     if (sprite === "attack2") {
+      if (this.image !== this.sprites.attack2.image) {
+        this.image.src = this.sprites.attack2.image.src;
+        this.framesMax = this.sprites.attack2.framesMax;
+        this.framesCurrent = 0;
+      }
+    }
+    if (sprite === "guard") {
       if (this.image !== this.sprites.attack2.image) {
         this.image.src = this.sprites.attack2.image.src;
         this.framesMax = this.sprites.attack2.framesMax;

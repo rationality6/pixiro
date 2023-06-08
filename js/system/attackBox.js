@@ -7,13 +7,14 @@ class AttackBox {
     lineColor = "green",
     lineWidth = 2,
     enable = false,
-
+    delay = 500,
     setTimeoutHandlers = [],
   }) {
     this.name = name;
     this.position = position;
     this.offset = offset;
     this.area = area;
+    this.delay = delay
 
     this.lineColor = lineColor;
     this.lineWidth = lineWidth;
@@ -44,19 +45,31 @@ class AttackBox {
 class BoxBucket {
   constructor() {
     this.bucket = [
-      new AttackBox({ name: "basic_attack", area: { width: 20, height: 20 } }),
+      new AttackBox({
+        name: "basic_attack",
+        area: { width: 200, height: 170 },
+        delay: 500,
+      }),
       new AttackBox({
         name: "special_attack",
-        position: { x: 40, y: 40 },
         area: { width: 30, height: 30 },
+        delay: 500,
+      }),
+      new AttackBox({
+        name: "bot_attack",
+        offset: { x: -190, y: -10 },
+        area: { width: 200, height: 170 },
+        delay: 500,
       }),
     ];
   }
 
-  enableAttack({ name, delay }) {
-    this.bucket.forEach((item) => {
-      if(item.name === name){
-        item.enable = true
+  enableAttack({ name }) {
+    this.bucket.forEach(async (item) => {
+      if (item.name === name) {
+        item.enable = true;
+        await setDelay(item.delay);
+        item.enable = false;
       }
     });
   }

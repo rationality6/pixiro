@@ -38,18 +38,17 @@ class Kenji extends Fighter {
   }
 
   botAttack() {
-    setTimeout(() => {
-      this.attack(300);
+    setTimeout(async () => {
+      this.isAttacking = true
       this.switchSprite("attack");
+      this.boxBucket.enableAttack({ name: "bot_attack" });
+      await setDelay(300)
+      this.isAttacking = false
       this.botAttack();
     }, 1000);
   }
 
   update() {
     super.update();
-    this.setAttackBox({
-      position: { x: -190, y: -10 },
-      area: { width: 200, height: 170 },
-    });
   }
 }

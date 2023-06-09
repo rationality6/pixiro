@@ -1,60 +1,61 @@
 class Sensor {
-  reactangularCollisionDetection({ attackBox, player, enermy }) {
-    const x = player.position.x + attackBox.position.x;
-    const y = player.position.y + attackBox.position.y;
+  collisionDetection({ hitbox, targetPlayer }) {
+    const hitbox_x_start = hitbox.position.x + hitbox.offset.x;
+    const hitbox_x_end =
+      hitbox.position.x + hitbox.offset.x + hitbox.area.width;
+    const hitbox_y_start = hitbox.position.y + hitbox.offset.y;
+    const hitbox_y_end =
+      hitbox.position.y + hitbox.offset.y + hitbox.area.height;
 
-    return (
-      x + attackBox.area.width >= enermy.position.x &&
-      x <= enermy.position.x + enermy.width &&
-      y + attackBox.area.height >= enermy.position.y &&
-      y <= enermy.position.y + enermy.height
-    );
+    const result =
+      targetPlayer.position.x <= hitbox_x_end &&
+      hitbox_x_start <= targetPlayer.position.x + targetPlayer.width &&
+      targetPlayer.position.y <= hitbox_y_end &&
+      hitbox_y_start <= targetPlayer.position.y + targetPlayer.height;
+
+    return result;
   }
 
   checkAllHitDetection() {
-    player.boxBucket.bucket.forEach((item) => {
-      this.hitDetection({ attackBox: item });
+    player.boxBucket.bucket.forEach((hitbox) => {
+      if (
+        this.collisionDetection({
+          hitbox: hitbox,
+          targetPlayer: enermy,
+        }) &&
+        hitbox.enable
+      ) {
+        player.playSoundHit();
+        enermy.hitpoint -= 15;
+        document.querySelector(
+          "#enermyHealth"
+        ).style.width = `${enermy.hitpoint}px`;
+        hitbox.enable = false;
+      } else if (hitbox.enable) {
+      } else {
+        hitbox.enable = false;
+      }
     });
-  }
 
-  hitDetection({ attackBox }) {
-    if (
-      this.reactangularCollisionDetection({
-        attackBox: attackBox,
-        player: player,
-        enermy: enermy,
-      }) &&
-      player.isAttacking
-    ) {
-      player.playSoundHit();
-      enermy.hitpoint -= 15;
-      document.querySelector(
-        "#enermyHealth"
-      ).style.width = `${enermy.hitpoint}px`;
-      player.isAttacking = false;
-    } else if (player.isAttacking) {
-    } else {
-      player.isAttacking = false;
-    }
-
-    if (
-      this.reactangularCollisionDetection({
-        player: enermy,
-        attackBox: attackBox,
-        enermy: player,
-      }) &&
-      enermy.isAttacking
-    ) {
-      enermy.playSoundHit();
-      player.hitpoint -= 15;
-      document.querySelector(
-        "#enermyHealth"
-      ).style.width = `${player.hitpoint}px`;
-      enermy.isAttacking = false;
-    } else if (enermy.isAttacking) {
-    } else {
-      enermy.isAttacking = false;
-    }
+    enermy.boxBucket.bucket.forEach((hitbox) => {
+      if (
+        this.collisionDetection({
+          hitbox: hitbox,
+          targetPlayer: player,
+        }) &&
+        hitbox.enable
+      ) {
+        enermy.playSoundHit();
+        player.hitpoint -= 15;
+        document.querySelector(
+          "#playerHealth"
+        ).style.width = `${player.hitpoint}px`;
+        hitbox.enable = false;
+      } else if (hitbox.enable) {
+      } else {
+        hitbox.enable = false;
+      }
+    });
   }
 }
 
@@ -212,7 +213,7 @@ const animate = () => {
 
 animate();
 
-window.addEventListener("keydown", (event) => {
+window.addEventListener("keydown", async (event) => {
   if (player.middleOfActionDelay) {
     return;
   }
@@ -235,9 +236,11 @@ window.addEventListener("keydown", (event) => {
       lastPressedKey = event.key;
       break;
     case " ":
-      // player.boxBucket.enableAttack({ name: "basic_attack" });
-      player.attack();
-      // player.gatlingAttack();
+      player.isAttacking = true;
+      player.switchSprite("attack");
+      player.boxBucket.enableAttack({ name: "basic_attack" });
+      await setDelay(400);
+      player.isAttacking = false;
       break;
     case "ArrowDown":
       player.switchSprite("guard");

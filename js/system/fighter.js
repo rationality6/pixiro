@@ -216,7 +216,7 @@ class Fighter extends Sprite {
 }
 
 const botPatternMixin = () => {
-  
+  // will add bot code and patterns
 }
 
-Object.assign(Fighter.prototype, soundEffectMixin);
+Object.assign(Fighter.prototype, botPatternMixin);

@@ -1,4 +1,4 @@
-let soundEffectMixin = {
+const soundEffectMixin = {
   playSoundDash() {
     new Audio("./assets/sounds/dash.wav").play();
   },
@@ -18,6 +18,9 @@ let musicStarted = false;
 
 document.querySelector("body").addEventListener("click", () => {
   if (musicStarted) return;
+  
+  document.getElementById("curtain").classList.add('hidden')
+
   backgroundMusic.play();
   musicStarted = true;
 });

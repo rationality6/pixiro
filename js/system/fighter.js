@@ -29,7 +29,7 @@ class Fighter extends Sprite {
     this.framesCurrent = 0;
     this.framesElapsed = 0;
     this.framesHold = 5;
-    
+
     // gatling
     this.gatling_count = 0;
     this.gatlingStart = false;
@@ -214,3 +214,9 @@ class Fighter extends Sprite {
     }
   }
 }
+
+const botPatternMixin = () => {
+  // will add bot code and patterns
+}
+
+Object.assign(Fighter.prototype, botPatternMixin);

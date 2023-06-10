@@ -86,7 +86,7 @@ const stage = new DarkForest();
 
 // player
 const playerOneStartPosition = { x: 100, y: 50 };
-const player = new Mack({ position: playerOneStartPosition });
+const player = new Lafull({ position: playerOneStartPosition });
 
 // enermy
 const playerTwoStartPosition = { x: 500, y: 50 };

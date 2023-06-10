@@ -52,3 +52,4 @@ class Kenji extends Fighter {
     super.update();
   }
 }
+

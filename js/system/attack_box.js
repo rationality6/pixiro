@@ -9,12 +9,15 @@ class AttackBox {
     enable = false,
     delay = 500,
     setTimeoutHandlers = [],
+    ctx,
   }) {
     this.name = name;
     this.position = position;
     this.offset = offset;
     this.area = area;
-    this.delay = delay
+    this.delay = delay;
+
+    this.ctx = ctx;
 
     this.lineColor = lineColor;
     this.lineWidth = lineWidth;
@@ -31,9 +34,9 @@ class AttackBox {
   render() {
     if (!this.enable) return;
 
-    ctx.strokeStyle = this.lineColor;
-    ctx.lineWidth = this.lineWidth;
-    ctx.strokeRect(
+    this.ctx.strokeStyle = this.lineColor;
+    this.ctx.lineWidth = this.lineWidth;
+    this.ctx.strokeRect(
       this.position.x + this.offset.x,
       this.position.y + this.offset.y,
       this.area.width,
@@ -43,23 +46,26 @@ class AttackBox {
 }
 
 class BoxBucket {
-  constructor() {
+  constructor({ ctx }) {
     this.bucket = [
       new AttackBox({
         name: "basic_attack",
         area: { width: 200, height: 170 },
         delay: 500,
+        ctx: ctx,
       }),
       new AttackBox({
         name: "special_attack",
         area: { width: 30, height: 30 },
         delay: 500,
+        ctx: ctx,
       }),
       new AttackBox({
         name: "bot_attack",
         offset: { x: -190, y: -10 },
         area: { width: 200, height: 170 },
         delay: 500,
+        ctx: ctx,
       }),
     ];
   }

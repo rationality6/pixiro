@@ -1,18 +1,20 @@
 class DarkForest {
-  constructor() {
+  constructor({ctx: ctx}) {
     this.stageName = "dark forest";
     this.background = new Sprite({
       position: { x: 0, y: 0 },
       scale: 0.63,
-      imageSrc: "./assets/background.png",
+      imageSrc: "./assets/dark_forest/background.png",
+      ctx: ctx,
     });
 
     this.shop = new Sprite({
       position: { x: 260, y: -16 },
-      imageSrc: "./assets/shop.png",
+      imageSrc: "./assets/dark_forest/shop.png",
       scale: 2.5,
       framesHold: 8,
       framesMax: 6,
+      ctx: ctx,
     });
   }
 

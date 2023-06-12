@@ -1,6 +1,7 @@
 class Kenji extends Fighter {
-  constructor(position) {
-    super(position);
+  constructor({ position, canvas, ctx }) {
+    super({ position, canvas, ctx });
+    this.name = "kenji";
     this.image.src = "./assets/kenji/Idle.png";
     this.velocity = { x: 0, y: 0 };
     this.framesMax = 4;
@@ -39,11 +40,11 @@ class Kenji extends Fighter {
 
   botAttackLoop() {
     setTimeout(async () => {
-      this.isAttacking = true
+      this.isAttacking = true;
       this.switchSprite("attack");
       this.boxBucket.enableAttack({ name: "bot_attack" });
       await setDelay(300);
-      this.isAttacking = false
+      this.isAttacking = false;
       this.botAttackLoop();
     }, 1000);
   }
@@ -52,4 +53,3 @@ class Kenji extends Fighter {
     super.update();
   }
 }
-

@@ -1,6 +1,7 @@
 class Lafull extends Fighter {
-  constructor(position) {
-    super(position);
+  constructor({ position, canvas, ctx }) {
+    super({ position, canvas, ctx });
+    this.name = "lafull";
     this.velocity = { x: 0, y: 0 };
     this.framesMax = 8;
     this.scale = 3;
@@ -10,9 +11,10 @@ class Lafull extends Fighter {
     this.height = 140;
     this.width = 70;
 
-    this.framesCurrent = 0
+    this.framesCurrent = 0;
 
     // sprites
+    debugger
     this.sprites = {
       idle: {
         imageSrc: "./assets/lafull/Idle.png",

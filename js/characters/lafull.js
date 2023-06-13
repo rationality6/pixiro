@@ -1,6 +1,6 @@
 class Lafull extends Fighter {
-  constructor({ position, canvas, ctx }) {
-    super({ position, canvas, ctx });
+  constructor({ position, ctx }) {
+    super({ position, ctx });
     this.name = "lafull";
     this.velocity = { x: 0, y: 0 };
     this.framesMax = 8;
@@ -14,7 +14,6 @@ class Lafull extends Fighter {
     this.framesCurrent = 0;
 
     // sprites
-    debugger
     this.sprites = {
       idle: {
         imageSrc: "./assets/lafull/Idle.png",
@@ -40,15 +39,20 @@ class Lafull extends Fighter {
         imageSrc: "./assets/lafull/Attack2.png",
         framesMax: 6,
       },
+      attack3: {
+        imageSrc: "./assets/lafull/Attack3.png",
+        framesMax: 8,
+      },
       death: {
         imageSrc: "./assets/lafull/Death.png",
         framesMax: 6,
       },
       takeHit: {
-        imageSrc: "./assets/lafull/Take Hit.png",
+        imageSrc: "./assets/lafull/Take hit.png",
         framesMax: 4,
       },
     };
-    this.mappingSprites();
+
+    super.mappingSprites()
   }
 }

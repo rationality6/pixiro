@@ -48,6 +48,7 @@ class Mack extends Fighter {
         framesMax: 4,
       },
     };
-    this.mappingSprites();
+
+    super.mappingSprites();
   }
 }

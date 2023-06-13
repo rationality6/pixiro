@@ -6,8 +6,6 @@ class Fighter extends Sprite {
     scale = 1,
     framesMax = 1,
     offset = { x: 0, y: 0 },
-    sprites,
-    canvas,
     ctx,
   }) {
     super({
@@ -16,7 +14,6 @@ class Fighter extends Sprite {
       scale,
       framesMax,
       offset,
-      canvas,
       ctx,
     });
 
@@ -40,10 +37,6 @@ class Fighter extends Sprite {
     this.gatling_count = 0;
     this.gatlingStart = false;
     this.gatlingTimeoutHandler = null;
-
-    // sprites
-    this.sprites = sprites;
-    this.mappingSprites();
 
     this.boxBucket = new BoxBucket({ ctx: this.ctx });
   }
@@ -96,10 +89,10 @@ class Fighter extends Sprite {
     this.position.x += this.velocity.x;
     this.position.y += this.velocity.y;
 
-    this.floorCollisionDetectionAndGravity(gravity);
-    this.wallCollisionDetection();
-    this.draw();
-    this.animateFrame();
+    // this.floorCollisionDetectionAndGravity(gravity);
+    // this.wallCollisionDetection();
+    // this.draw();
+    // this.animateFrame();
   }
 
   setActionDelay(msecond) {
@@ -112,7 +105,7 @@ class Fighter extends Sprite {
   floorCollisionDetectionAndGravity(gravity) {
     if (
       this.position.y + this.height + this.velocity.y >=
-      this.canvas.height - this.ground
+      this.ctx.canvas.height - this.ground
     ) {
       this.velocity.y = 0;
       this.position.y = 160;
@@ -123,8 +116,8 @@ class Fighter extends Sprite {
 
   wallCollisionDetection() {
     // right side
-    if (this.position.x + this.width >= this.canvas.width) {
-      this.position.x = this.canvas.width - this.width;
+    if (this.position.x + this.width >= this.ctx.canvas.width) {
+      this.position.x = this.ctx.canvas.width - this.width;
     }
 
     // left side

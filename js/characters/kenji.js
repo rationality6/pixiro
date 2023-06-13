@@ -33,7 +33,7 @@ class Kenji extends Fighter {
       },
     };
 
-    this.mappingSprites();
+    super.mappingSprites();
 
     this.botAttackLoop();
   }

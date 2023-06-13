@@ -6,16 +6,13 @@ class Sensor {
   //   const hitbox_y_start = hitbox.position.y + hitbox.offset.y;
   //   const hitbox_y_end =
   //     hitbox.position.y + hitbox.offset.y + hitbox.area.height;
-
   //   const result =
   //     targetPlayer.position.x <= hitbox_x_end &&
   //     hitbox_x_start <= targetPlayer.position.x + targetPlayer.width &&
   //     targetPlayer.position.y <= hitbox_y_end &&
   //     hitbox_y_start <= targetPlayer.position.y + targetPlayer.height;
-
   //   return result;
   // }
-
   // checkAllHitDetection() {
   //   player.boxBucket.bucket.forEach((hitbox) => {
   //     if (
@@ -36,7 +33,6 @@ class Sensor {
   //       hitbox.enable = false;
   //     }
   //   });
-
   //   enermy.boxBucket.bucket.forEach((hitbox) => {
   //     if (
   //       this.collisionDetection({
@@ -84,7 +80,6 @@ class Pixiro {
     const playerOneStartPosition = { x: 100, y: 50 };
     this.player = new Lafull({
       position: playerOneStartPosition,
-      canvas: this.canvas,
       ctx: this.ctx,
     });
 
@@ -95,6 +90,8 @@ class Pixiro {
     //   canvas: this.canvas,
     //   ctx: this.ctx,
     // });
+
+    this.inputHandler()
   }
 
   run() {
@@ -109,7 +106,7 @@ class Pixiro {
 
     this.stage.render();
 
-    this.player.update(this.gravity);
+    // this.player.update(this.gravity);
     // enermy.update();
 
     // sensor.checkAllHitDetection();
@@ -192,8 +189,74 @@ class Pixiro {
       document.querySelector("#displayText").innerHTML = "Player 2 Wins";
       player.switchSprite("death");
     }
-
     this.isGameEnded = true;
+  }
+
+  inputHandler() {
+    // input
+    let lastPressedKey;
+
+    const keys = {
+      ArrayUp: {
+        pressed: false,
+      },
+      ArrowLeft: {
+        pressed: false,
+      },
+      ArrowRight: {
+        pressed: false,
+      },
+    };
+
+    window.addEventListener("keydown", async (event) => {
+      if (player.middleOfActionDelay) {
+        return;
+      }
+
+      switch (event.key) {
+        case "ArrowUp":
+          if (player.velocity.y === 0) {
+            player.velocity.y = -13;
+            player.switchSprite("jump");
+          }
+          break;
+        case "ArrowRight":
+          keys.ArrowRight.pressed = true;
+          lastPressedKey = "ArrowRight";
+          lastPressedKey = event.key;
+          break;
+        case "ArrowLeft":
+          keys.ArrowLeft.pressed = true;
+          lastPressedKey = "ArrowLeft";
+          lastPressedKey = event.key;
+          break;
+        case " ":
+          player.isAttacking = true;
+          player.switchSprite("attack");
+          player.boxBucket.enableAttack({ name: "basic_attack" });
+          await setDelay(400);
+          player.isAttacking = false;
+          break;
+        case "ArrowDown":
+          player.switchSprite("guard");
+          console.log("guard");
+          break;
+      }
+    });
+
+    window.addEventListener("keyup", (event) => {
+      if (event.key === "ArrowUp") {
+        keys.ArrayUp.pressed = false;
+      }
+
+      if (event.key === "ArrowRight") {
+        keys.ArrowRight.pressed = false;
+      }
+
+      if (event.key === "ArrowLeft") {
+        keys.ArrowLeft.pressed = false;
+      }
+    });
   }
 }
 
@@ -213,69 +276,3 @@ const objectCollisionDetection = ({ player, enermy }) => {
   //   player.position.x = 0
   // }
 };
-
-// input
-
-let lastPressedKey;
-
-const keys = {
-  ArrayUp: {
-    pressed: false,
-  },
-  ArrowLeft: {
-    pressed: false,
-  },
-  ArrowRight: {
-    pressed: false,
-  },
-};
-
-window.addEventListener("keydown", async (event) => {
-  if (player.middleOfActionDelay) {
-    return;
-  }
-
-  switch (event.key) {
-    case "ArrowUp":
-      if (player.velocity.y === 0) {
-        player.velocity.y = -13;
-        player.switchSprite("jump");
-      }
-      break;
-    case "ArrowRight":
-      keys.ArrowRight.pressed = true;
-      lastPressedKey = "ArrowRight";
-      lastPressedKey = event.key;
-      break;
-    case "ArrowLeft":
-      keys.ArrowLeft.pressed = true;
-      lastPressedKey = "ArrowLeft";
-      lastPressedKey = event.key;
-      break;
-    case " ":
-      player.isAttacking = true;
-      player.switchSprite("attack");
-      player.boxBucket.enableAttack({ name: "basic_attack" });
-      await setDelay(400);
-      player.isAttacking = false;
-      break;
-    case "ArrowDown":
-      player.switchSprite("guard");
-      console.log("guard");
-      break;
-  }
-});
-
-window.addEventListener("keyup", (event) => {
-  if (event.key === "ArrowUp") {
-    keys.ArrayUp.pressed = false;
-  }
-
-  if (event.key === "ArrowRight") {
-    keys.ArrowRight.pressed = false;
-  }
-
-  if (event.key === "ArrowLeft") {
-    keys.ArrowLeft.pressed = false;
-  }
-});

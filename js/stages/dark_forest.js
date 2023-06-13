@@ -1,5 +1,5 @@
 class DarkForest {
-  constructor({ctx: ctx}) {
+  constructor({ ctx }) {
     this.stageName = "dark forest";
     this.background = new Sprite({
       position: { x: 0, y: 0 },

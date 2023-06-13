@@ -1,6 +1,6 @@
 class Mack extends Fighter {
-  constructor({ position, canvas, ctx }) {
-    super({ position, canvas, ctx });
+  constructor({ position, ctx }) {
+    super({ position, ctx });
     this.name = "mack";
     this.velocity = { x: 0, y: 0 };
     this.framesMax = 8;

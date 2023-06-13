@@ -89,10 +89,10 @@ class Fighter extends Sprite {
     this.position.x += this.velocity.x;
     this.position.y += this.velocity.y;
 
-    // this.floorCollisionDetectionAndGravity(gravity);
-    // this.wallCollisionDetection();
-    // this.draw();
-    // this.animateFrame();
+    this.floorCollisionDetectionAndGravity(gravity);
+    this.wallCollisionDetection();
+    this.draw();
+    this.animateFrame();
   }
 
   setActionDelay(msecond) {

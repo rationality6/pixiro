@@ -31,7 +31,7 @@ class Lafull extends Fighter {
         imageSrc: "./assets/lafull/Fall.png",
         framesMax: 3,
       },
-      attack: {
+      attack3: {
         imageSrc: "./assets/lafull/Attack1.png",
         framesMax: 7,
       },
@@ -39,7 +39,7 @@ class Lafull extends Fighter {
         imageSrc: "./assets/lafull/Attack2.png",
         framesMax: 6,
       },
-      attack3: {
+      attack: {
         imageSrc: "./assets/lafull/Attack3.png",
         framesMax: 8,
       },

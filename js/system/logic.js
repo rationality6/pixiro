@@ -35,25 +35,25 @@ class Sensor {
       }
     });
 
-    // enermy.boxBucket.bucket.forEach((hitbox) => {
-    //   if (
-    //     this.collisionDetection({
-    //       hitbox: hitbox,
-    //       targetPlayer: player,
-    //     }) &&
-    //     hitbox.enable
-    //   ) {
-    //     enermy.playSoundHit();
-    //     player.hitpoint -= 15;
-    //     document.querySelector(
-    //       "#playerHealth"
-    //     ).style.width = `${player.hitpoint}px`;
-    //     hitbox.enable = false;
-    //   } else if (hitbox.enable) {
-    //   } else {
-    //     hitbox.enable = false;
-    //   }
-    // });
+    enermy.boxBucket.bucket.forEach((hitbox) => {
+      if (
+        this.collisionDetection({
+          hitbox: hitbox,
+          targetPlayer: player,
+        }) &&
+        hitbox.enable
+      ) {
+        enermy.playSoundHit();
+        player.hitpoint -= 15;
+        document.querySelector(
+          "#playerHealth"
+        ).style.width = `${player.hitpoint}px`;
+        hitbox.enable = false;
+      } else if (hitbox.enable) {
+      } else {
+        hitbox.enable = false;
+      }
+    });
   }
 }
 
@@ -90,7 +90,7 @@ class Pixiro {
       ctx: this.ctx,
     });
 
-    const sensor = new Sensor();
+    this.sensor = new Sensor();
 
     this.lastPressedKey;
 
@@ -124,7 +124,7 @@ class Pixiro {
     this.player.update(this.gravity);
     this.enermy.update(this.gravity);
 
-    // this.sensor.checkAllHitDetection(this.player, this.enermy);
+    this.sensor.checkAllHitDetection(this.player, this.enermy);
 
     this.player.boxBucket.renderAll({ object: this.player });
     this.enermy.boxBucket.renderAll({ object: this.enermy });
@@ -143,6 +143,12 @@ class Pixiro {
       this.player.switchSprite("jump");
     }
     if (this.player.velocity.y > 0) {
+      this.player.switchSprite("fall");
+    }
+    if (this.enermy.velocity.y < 0) {
+      this.player.switchSprite("jump");
+    }
+    if (this.enermy.velocity.y > 0) {
       this.player.switchSprite("fall");
     }
 
@@ -258,17 +264,14 @@ class Pixiro {
     });
   }
 
-  // collisions
   objectCollisionDetection() {
-    // right side collision
     if (this.player.position.x + this.player.width >= this.enermy.position.x) {
-      this.player.velocity.x = 0;
-    }
+      this.player.position.x -= 12;
+      this.player.position.y -= 2;
 
-    // // left side
-    // if (player.position.x <= 0) {
-    //   player.position.x = 0
-    // }
+      this.enermy.position.x += 12;
+      this.enermy.position.y += 2;
+    }
   }
 }
 

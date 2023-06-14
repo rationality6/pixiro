@@ -1,11 +1,12 @@
 class Sprite {
   constructor({
     position,
-    imageSrc,
+    imageSrc = "",
     scale = 1,
     framesMax = 1,
     offset = { x: 0, y: 0 },
     framesHold = 10,
+    ctx,
   }) {
     this.position = position;
     this.width = 50;
@@ -18,9 +19,11 @@ class Sprite {
     this.framesElapsed = 0;
     this.framesHold = framesHold;
     this.offset = offset;
+    this.ctx = ctx;
   }
+
   draw() {
-    ctx.drawImage(
+    this.ctx.drawImage(
       this.image,
       this.framesCurrent * (this.image.width / this.framesMax),
       0,

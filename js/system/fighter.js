@@ -6,7 +6,7 @@ class Fighter extends Sprite {
     scale = 1,
     framesMax = 1,
     offset = { x: 0, y: 0 },
-    sprites,
+    ctx,
   }) {
     super({
       position,
@@ -14,12 +14,15 @@ class Fighter extends Sprite {
       scale,
       framesMax,
       offset,
+      ctx,
     });
 
     // default state
     this.hitpoint = 100;
     this.height = 150;
     this.width = 50;
+
+    this.ground = 60;
 
     this.velocity = velocity;
 
@@ -35,11 +38,7 @@ class Fighter extends Sprite {
     this.gatlingStart = false;
     this.gatlingTimeoutHandler = null;
 
-    // sprites
-    this.sprites = sprites;
-    this.mappingSprites();
-
-    this.boxBucket = new BoxBucket();
+    this.boxBucket = new BoxBucket({ ctx: this.ctx });
   }
 
   mappingSprites() {
@@ -50,13 +49,18 @@ class Fighter extends Sprite {
   }
 
   drawBodyBox() {
-    ctx.strokeStyle = "red";
-    ctx.lineWidth = 2;
-    ctx.strokeRect(this.position.x, this.position.y, this.width, this.height);
+    this.ctx.strokeStyle = "red";
+    this.ctx.lineWidth = 2;
+    this.ctx.strokeRect(
+      this.position.x,
+      this.position.y,
+      this.width,
+      this.height
+    );
 
-    ctx.strokeStyle = "blue";
-    ctx.lineWidth = 2;
-    ctx.strokeRect(
+    this.ctx.strokeStyle = "blue";
+    this.ctx.lineWidth = 2;
+    this.ctx.strokeRect(
       this.position.x + 1,
       this.position.y + 1,
       this.width + 1,
@@ -65,12 +69,16 @@ class Fighter extends Sprite {
   }
 
   drawHitPoint() {
-    ctx.fillStyle = "white";
-    ctx.font = "20px Arial";
-    ctx.fillText(`HP: ${this.hitpoint}`, this.position.x, this.position.y - 10);
+    this.ctx.fillStyle = "white";
+    this.ctx.font = "20px Arial";
+    this.ctx.fillText(
+      `HP: ${this.hitpoint}`,
+      this.position.x,
+      this.position.y - 10
+    );
   }
 
-  update() {
+  update(gravity) {
     // body box
     this.drawBodyBox();
 
@@ -81,7 +89,7 @@ class Fighter extends Sprite {
     this.position.x += this.velocity.x;
     this.position.y += this.velocity.y;
 
-    this.floorCollisionDetectionAndGravity();
+    this.floorCollisionDetectionAndGravity(gravity);
     this.wallCollisionDetection();
     this.draw();
     this.animateFrame();
@@ -94,11 +102,10 @@ class Fighter extends Sprite {
     setTimeout(() => (this.middleOfActionDelay = false), msecond);
   }
 
-  floorCollisionDetectionAndGravity() {
-    const ground = 60;
+  floorCollisionDetectionAndGravity(gravity) {
     if (
       this.position.y + this.height + this.velocity.y >=
-      canvas.height - ground
+      this.ctx.canvas.height - this.ground
     ) {
       this.velocity.y = 0;
       this.position.y = 160;
@@ -109,8 +116,8 @@ class Fighter extends Sprite {
 
   wallCollisionDetection() {
     // right side
-    if (this.position.x + this.width >= canvas.width) {
-      this.position.x = canvas.width - this.width;
+    if (this.position.x + this.width >= this.ctx.canvas.width) {
+      this.position.x = this.ctx.canvas.width - this.width;
     }
 
     // left side
@@ -122,8 +129,8 @@ class Fighter extends Sprite {
   async attack(delay) {
     this.setActionDelay(delay);
     this.isAttacking = true;
-    await setDelay(delay)
-    this.isAttacking = false
+    await setDelay(delay);
+    this.isAttacking = false;
   }
 
   gatlingAttack() {
@@ -217,6 +224,6 @@ class Fighter extends Sprite {
 
 const botPatternMixin = () => {
   // will add bot code and patterns
-}
+};
 
 Object.assign(Fighter.prototype, botPatternMixin);

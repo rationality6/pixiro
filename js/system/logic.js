@@ -93,7 +93,7 @@ class Pixiro {
     this.isGameEnded = false;
 
     // stage
-    this.stage = new DarkForest({ ctx: this.ctx });
+    this.stage = new JapanCastle({ ctx: this.ctx });
 
     // player
     const playerOneStartPosition = { x: 100, y: 50 };
@@ -256,6 +256,8 @@ class Pixiro {
           this.lastPressedKey = event.key;
           break;
         case " ":
+          console.log("attack")
+          if ((this.player.isAttacking == true)) return;
           this.player.isAttacking = true;
           this.player.switchSprite("attack");
           this.player.boxBucket.enableAttack({ name: "basic_attack" });
@@ -301,4 +303,4 @@ const setDelay = (delayInms) => {
 
 const getRandomInt = (max) => {
   return Math.floor(Math.random() * max);
-}
+};

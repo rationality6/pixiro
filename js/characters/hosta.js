@@ -23,7 +23,7 @@ class Hosta extends Fighter {
       run: {
         imageSrc: "./assets/hosta/Run.png",
         framesMax: 8,
-        imageSrcReversed: "",
+        imageSrcReversed: "./assets/hosta_reversed/run.png",
       },
       jump: {
         imageSrc: "./assets/hosta/Jump.png",

@@ -13,23 +13,28 @@ class Kenji extends Fighter {
     // sprites
     this.sprites = {
       idle: {
-        imageSrc: "./assets/kenji/Idle.png",
+        imageSrc: "",
+        imageSrcReversed: "./assets/kenji/Idle.png",
         framesMax: 4,
       },
       death: {
-        imageSrc: "./assets/kenji/Death.png",
+        imageSrc: "",
+        imageSrcReversed: "./assets/kenji/Death.png",
         framesMax: 7,
       },
       fall: {
-        imageSrc: "./assets/kenji/Fall.png",
+        imageSrc: "",
+        imageSrcReversed: "./assets/kenji/Fall.png",
         framesMax: 2,
       },
       attack: {
-        imageSrc: "./assets/kenji/Attack1.png",
+        imageSrc: "",
+        imageSrcReversed: "./assets/kenji/Attack1.png",
         framesMax: 4,
       },
       takeHit: {
-        imageSrc: "./assets/kenji/Take hit.png",
+        imageSrc: "",
+        imageSrcReversed: "./assets/kenji/Take hit.png",
         framesMax: 3,
       },
     };

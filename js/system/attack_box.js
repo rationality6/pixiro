@@ -64,7 +64,7 @@ class BoxBucket {
         name: "bot_attack",
         offset: { x: -190, y: -10 },
         area: { width: 200, height: 170 },
-        delay: 500,
+        delay: 1100,
         ctx: ctx,
       }),
     ];

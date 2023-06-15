@@ -1,6 +1,6 @@
 class Kenji extends Fighter {
-  constructor({ position, ctx }) {
-    super({ position, ctx });
+  constructor({ position, ctx, positionReversed = false }) {
+    super({ position, ctx, positionReversed });
     this.name = "kenji";
     this.velocity = { x: 0, y: 0 };
     this.framesMax = 4;
@@ -36,17 +36,29 @@ class Kenji extends Fighter {
 
     super.mappingSprites();
 
-    this.botAttackLoop();
+    this.botActionLoop();
   }
 
-  botAttackLoop() {
+  botActionLoop() {
     setTimeout(async () => {
-      this.isAttacking = true;
-      this.switchSprite("attack");
-      this.boxBucket.enableAttack({ name: "bot_attack" });
-      await setDelay(300);
-      this.isAttacking = false;
-      this.botAttackLoop();
-    }, 1000);
+      const actionNumber = getRandomInt(4);
+
+      this.botAttack();
+      this.botMoveForward();
+
+      this.botActionLoop();
+    }, 2000);
+  }
+
+  async botAttack() {
+    this.isAttacking = true;
+    this.switchSprite("attack");
+    this.boxBucket.enableAttack({ name: "bot_attack" });
+    await setDelay(300);
+    this.isAttacking = false;
+  }
+
+  botMoveForward() {
+    this.velocity.x = 10;
   }
 }

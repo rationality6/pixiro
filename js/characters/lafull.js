@@ -1,6 +1,6 @@
 class Lafull extends Fighter {
-  constructor({ position, ctx }) {
-    super({ position, ctx });
+  constructor({ position, ctx, positionReversed = false }) {
+    super({ position, ctx, positionReversed });
     this.name = "lafull";
     this.velocity = { x: 0, y: 0 };
     this.framesMax = 8;

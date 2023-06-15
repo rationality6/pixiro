@@ -7,6 +7,7 @@ class Fighter extends Sprite {
     framesMax = 1,
     offset = { x: 0, y: 0 },
     ctx,
+    positionReversed = false,
   }) {
     super({
       position,
@@ -23,10 +24,13 @@ class Fighter extends Sprite {
     this.width = 50;
 
     this.ground = 60;
+    
+    this.positionReversed = positionReversed;
 
     this.velocity = velocity;
 
     this.isAttacking = false;
+
 
     // animation
     this.framesCurrent = 0;
@@ -44,7 +48,14 @@ class Fighter extends Sprite {
   mappingSprites() {
     for (const sprite in this.sprites) {
       this.sprites[sprite].image = new Image();
-      this.sprites[sprite].image.src = this.sprites[sprite].imageSrc;
+
+      if(this.positionReversed){
+        this.sprites[sprite].image.src = this.sprites[sprite].imageSrcReversed;
+      }else{
+        this.sprites[sprite].image.src = this.sprites[sprite].imageSrc;
+      }
+      
+
     }
   }
 

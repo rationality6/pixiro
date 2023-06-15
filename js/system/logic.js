@@ -6,12 +6,31 @@ class Sensor {
     const hitbox_y_start = hitbox.position.y + hitbox.offset.y;
     const hitbox_y_end =
       hitbox.position.y + hitbox.offset.y + hitbox.area.height;
+
     const result =
       targetPlayer.position.x <= hitbox_x_end &&
       hitbox_x_start <= targetPlayer.position.x + targetPlayer.width &&
       targetPlayer.position.y <= hitbox_y_end &&
       hitbox_y_start <= targetPlayer.position.y + targetPlayer.height;
     return result;
+  }
+
+  hitboxCollisionDetection({ hitbox1, hitbox2 }) {
+    const hitbox1_x_start = hitbox1.position.x + hitbox1.offset.x;
+    const hitbox1_x_end = hitbox1.position.x + hitbox1.offset.x + hitbox1.width;
+    const hitbox1_y_start = hitbox1.position.y + hitbox1.offset.y;
+    const hitbox1_y_end =
+      hitbox1.position.y + hitbox1.offset.y + hitbox1.height;
+
+    const hitbox2_x_start = hitbox2.position.x + hitbox2.offset.x;
+    const hitbox2_x_end = hitbox2.position.x + hitbox2.offset.x + hitbox2.width;
+    const hitbox2_y_start = hitbox2.position.y + hitbox2.offset.y;
+    const hitbox2_y_end =
+      hitbox2.position.y + hitbox2.offset.y + hitbox2.height;
+
+    // const result = (
+    //   hitbox1_x_start <= hitbox2_x_end &&
+    // )
   }
 
   checkAllHitDetection(player, enermy) {
@@ -85,9 +104,10 @@ class Pixiro {
 
     // enermy
     const playerTwoStartPosition = { x: 500, y: 50 };
-    this.enermy = new Kenji({
+    this.enermy = new Hosta({
       position: playerTwoStartPosition,
       ctx: this.ctx,
+      positionReversed: true,
     });
 
     this.sensor = new Sensor();
@@ -239,7 +259,7 @@ class Pixiro {
           this.player.isAttacking = true;
           this.player.switchSprite("attack");
           this.player.boxBucket.enableAttack({ name: "basic_attack" });
-          await setDelay(400);
+          await setDelay(500);
           this.player.isAttacking = false;
           break;
         case "ArrowDown":
@@ -278,3 +298,7 @@ class Pixiro {
 const setDelay = (delayInms) => {
   return new Promise((resolve) => setTimeout(resolve, delayInms));
 };
+
+const getRandomInt = (max) => {
+  return Math.floor(Math.random() * max);
+}

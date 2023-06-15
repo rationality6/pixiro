@@ -1,6 +1,6 @@
 class Kenji extends Fighter {
-  constructor({ position, ctx }) {
-    super({ position, ctx });
+  constructor({ position, ctx, positionReversed = false }) {
+    super({ position, ctx, positionReversed });
     this.name = "kenji";
     this.velocity = { x: 0, y: 0 };
     this.framesMax = 4;
@@ -13,40 +13,57 @@ class Kenji extends Fighter {
     // sprites
     this.sprites = {
       idle: {
-        imageSrc: "./assets/kenji/Idle.png",
+        imageSrc: "",
+        imageSrcReversed: "./assets/kenji/Idle.png",
         framesMax: 4,
       },
       death: {
-        imageSrc: "./assets/kenji/Death.png",
+        imageSrc: "",
+        imageSrcReversed: "./assets/kenji/Death.png",
         framesMax: 7,
       },
       fall: {
-        imageSrc: "./assets/kenji/Fall.png",
+        imageSrc: "",
+        imageSrcReversed: "./assets/kenji/Fall.png",
         framesMax: 2,
       },
       attack: {
-        imageSrc: "./assets/kenji/Attack1.png",
+        imageSrc: "",
+        imageSrcReversed: "./assets/kenji/Attack1.png",
         framesMax: 4,
       },
       takeHit: {
-        imageSrc: "./assets/kenji/Take hit.png",
+        imageSrc: "",
+        imageSrcReversed: "./assets/kenji/Take hit.png",
         framesMax: 3,
       },
     };
 
     super.mappingSprites();
 
-    this.botAttackLoop();
+    this.botActionLoop();
   }
 
-  botAttackLoop() {
+  botActionLoop() {
     setTimeout(async () => {
-      this.isAttacking = true;
-      this.switchSprite("attack");
-      this.boxBucket.enableAttack({ name: "bot_attack" });
-      await setDelay(300);
-      this.isAttacking = false;
-      this.botAttackLoop();
-    }, 1000);
+      const actionNumber = getRandomInt(4);
+
+      this.botAttack();
+      this.botMoveForward();
+
+      this.botActionLoop();
+    }, 2000);
+  }
+
+  async botAttack() {
+    this.isAttacking = true;
+    this.switchSprite("attack");
+    this.boxBucket.enableAttack({ name: "bot_attack" });
+    await setDelay(300);
+    this.isAttacking = false;
+  }
+
+  botMoveForward() {
+    this.velocity.x = 10;
   }
 }

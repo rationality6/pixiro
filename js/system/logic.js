@@ -256,7 +256,6 @@ class Pixiro {
           this.lastPressedKey = event.key;
           break;
         case " ":
-          console.log("attack")
           if ((this.player.isAttacking == true)) return;
           this.player.isAttacking = true;
           this.player.switchSprite("attack");

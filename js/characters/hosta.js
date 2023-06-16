@@ -53,7 +53,7 @@ class Hosta extends Fighter {
       death: {
         imageSrc: "./assets/hosta/Death.png",
         framesMax: 6,
-        imageSrcReversed: "",
+        imageSrcReversed: "./assets/hosta_reversed/death.png",
       },
       takeHit: {
         imageSrc: "./assets/hosta/Take hit.png",

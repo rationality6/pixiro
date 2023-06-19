@@ -12,6 +12,7 @@ class Hosta extends Fighter {
     this.width = 90;
 
     this.framesCurrent = 0;
+    
 
     // sprites
     this.sprites = {
@@ -52,7 +53,7 @@ class Hosta extends Fighter {
       },
       death: {
         imageSrc: "./assets/hosta/Death.png",
-        framesMax: 6,
+        framesMax: 11,
         imageSrcReversed: "./assets/hosta_reversed/death.png",
       },
       takeHit: {
@@ -69,7 +70,7 @@ class Hosta extends Fighter {
 
   botActionLoop() {
     setTimeout(async () => {
-      const actionNumber = getRandomInt(5);
+      const actionNumber = getRandomInt(6);
 
       switch (actionNumber) {
         case 0:
@@ -91,6 +92,12 @@ class Hosta extends Fighter {
           this.botMoveBack();
           this.botJump();
           this.botMoveBack();
+          this.botAttack();
+          break;
+        case 4:
+          this.botMoveForward();
+          this.botJump();
+          this.botMoveForward();
           this.botAttack();
           break;
       }

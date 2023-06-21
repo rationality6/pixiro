@@ -171,10 +171,10 @@ class Pixiro {
       this.player.switchSprite("fall");
     }
     if (this.enermy.velocity.y < 0) {
-      this.player.switchSprite("jump");
+      this.enermy.switchSprite("jump");
     }
     if (this.enermy.velocity.y > 0) {
-      this.player.switchSprite("fall");
+      this.enermy.switchSprite("fall");
     }
 
     if (this.keys.ArrowRight.pressed && this.lastPressedKey === "ArrowRight") {

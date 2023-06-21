@@ -35,42 +35,44 @@ class Sensor {
 
   checkAllHitDetection(player, enermy) {
     player.boxBucket.bucket.forEach((hitbox) => {
-      if (
-        this.collisionDetection({
-          hitbox: hitbox,
-          targetPlayer: enermy,
-        }) &&
-        hitbox.enable
-      ) {
-        player.playSoundHit();
-        enermy.hitpoint -= 15;
-        document.querySelector(
-          "#enermyHealth"
-        ).style.width = `${enermy.hitpoint}px`;
-        hitbox.enable = false;
-      } else if (hitbox.enable) {
-      } else {
-        hitbox.enable = false;
+      if (hitbox.enable) {
+        if (
+          this.collisionDetection({
+            hitbox: hitbox,
+            targetPlayer: enermy,
+          })
+        ) {
+          player.playSoundHit();
+          enermy.hitpoint -= 15;
+          document.querySelector(
+            "#enermyHealth"
+          ).style.width = `${enermy.hitpoint}px`;
+          hitbox.enable = false;
+        } else if (hitbox.enable) {
+        } else {
+          hitbox.enable = false;
+        }
       }
     });
 
     enermy.boxBucket.bucket.forEach((hitbox) => {
-      if (
-        this.collisionDetection({
-          hitbox: hitbox,
-          targetPlayer: player,
-        }) &&
-        hitbox.enable
-      ) {
-        enermy.playSoundHit();
-        player.hitpoint -= 15;
-        document.querySelector(
-          "#playerHealth"
-        ).style.width = `${player.hitpoint}px`;
-        hitbox.enable = false;
-      } else if (hitbox.enable) {
-      } else {
-        hitbox.enable = false;
+      if (hitbox.enable) {
+        if (
+          this.collisionDetection({
+            hitbox: hitbox,
+            targetPlayer: player,
+          })
+        ) {
+          enermy.playSoundHit();
+          player.hitpoint -= 15;
+          document.querySelector(
+            "#playerHealth"
+          ).style.width = `${player.hitpoint}px`;
+          hitbox.enable = false;
+        } else if (hitbox.enable) {
+        } else {
+          hitbox.enable = false;
+        }
       }
     });
   }
@@ -119,6 +121,9 @@ class Pixiro {
         pressed: false,
       },
       ArrowLeft: {
+        pressed: false,
+      },
+      ArrowDown: {
         pressed: false,
       },
       ArrowRight: {
@@ -256,7 +261,7 @@ class Pixiro {
           this.lastPressedKey = event.key;
           break;
         case " ":
-          if ((this.player.isAttacking == true)) return;
+          if (this.player.isAttacking == true) return;
           this.player.isAttacking = true;
           this.player.switchSprite("attack");
           this.player.boxBucket.enableAttack({ name: "basic_attack" });
@@ -264,8 +269,10 @@ class Pixiro {
           this.player.isAttacking = false;
           break;
         case "ArrowDown":
+          if (this.player.isAttacking == true) return;
+          this.player.isAttacking = true;
           this.player.switchSprite("guard");
-          console.log("guard");
+          this.player.boxBucket.enableAttack({ name: "guard" });
           break;
       }
     });
@@ -281,6 +288,10 @@ class Pixiro {
 
       if (event.key === "ArrowLeft") {
         this.keys.ArrowLeft.pressed = false;
+      }
+      if (event.key === "ArrowDown") {
+        this.keys.ArrowLeft.pressed = false;
+        this.player.isAttacking = false;
       }
     });
   }

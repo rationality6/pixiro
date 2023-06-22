@@ -164,23 +164,33 @@ class Pixiro {
       this.enermy.switchSprite("idle");
     }
 
-    if (this.player.velocity.y < 0) {
-      this.player.switchSprite("jump");
-    }
-    if (this.player.velocity.y > 0) {
-      this.player.switchSprite("fall");
-    }
-    if (this.enermy.velocity.y < 0) {
-      this.enermy.switchSprite("jump");
-    }
-    if (this.enermy.velocity.y > 0) {
-      this.enermy.switchSprite("fall");
+    if (this.player.isAttacking === false) {
+      if (this.player.velocity.y < 0) {
+        this.player.switchSprite("jump");
+      }
+      if (this.player.velocity.y > 0) {
+        this.player.switchSprite("fall");
+      }
     }
 
-    if (this.keys.ArrowRight.pressed && this.lastPressedKey === "ArrowRight") {
+    if (this.enermy.isAttacking === false) {
+      if (this.enermy.velocity.y < 0) {
+        this.enermy.switchSprite("jump");
+      }
+      if (this.enermy.velocity.y > 0) {
+        this.enermy.switchSprite("fall");
+      }
+    }
+
+    if (
+      this.player.isAttacking === false &&
+      this.keys.ArrowRight.pressed &&
+      this.lastPressedKey === "ArrowRight"
+    ) {
       this.player.velocity.x = 7;
       this.player.switchSprite("run");
     } else if (
+      this.player.isAttacking === false &&
       this.keys.ArrowLeft.pressed &&
       this.lastPressedKey === "ArrowLeft"
     ) {

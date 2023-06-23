@@ -29,12 +29,12 @@ class Hosta extends Fighter {
       jump: {
         imageSrc: "./assets/hosta/Jump.png",
         framesMax: 3,
-        imageSrcReversed: "",
+        imageSrcReversed: "./assets/hosta_reversed/jump.png",
       },
       fall: {
         imageSrc: "./assets/hosta/Fall.png",
         framesMax: 3,
-        imageSrcReversed: "",
+        imageSrcReversed: "./assets/hosta_reversed/fall.png",
       },
       attack3: {
         imageSrc: "./assets/hosta/Attack1.png",

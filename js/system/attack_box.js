@@ -61,6 +61,12 @@ class BoxBucket {
         ctx: ctx,
       }),
       new AttackBox({
+        name: "guard",
+        area: { width: 70, height: 70 },
+        delay: 500,
+        ctx: ctx,
+      }),
+      new AttackBox({
         name: "bot_attack",
         offset: { x: -190, y: -10 },
         area: { width: 200, height: 170 },

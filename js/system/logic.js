@@ -34,43 +34,56 @@ class Sensor {
   }
 
   checkAllHitDetection(player, enermy) {
+    const playerEnableHitbox = player.boxBucket.bucket.find((hitbox) => {
+      return hitbox.enable == true;
+    });
+    const enermyEnableHitbox = enermy.boxBucket.bucket.find((hitbox) => {
+      return hitbox.enable == true;
+    });
+
+    if (playerEnableHitbox && enermyEnableHitbox) {
+      console.log("챙");
+    }
+
     player.boxBucket.bucket.forEach((hitbox) => {
-      if (
-        this.collisionDetection({
-          hitbox: hitbox,
-          targetPlayer: enermy,
-        }) &&
-        hitbox.enable
-      ) {
-        player.playSoundHit();
-        enermy.hitpoint -= 15;
-        document.querySelector(
-          "#enermyHealth"
-        ).style.width = `${enermy.hitpoint}px`;
-        hitbox.enable = false;
-      } else if (hitbox.enable) {
-      } else {
-        hitbox.enable = false;
+      if (hitbox.enable) {
+        if (
+          this.collisionDetection({
+            hitbox: hitbox,
+            targetPlayer: enermy,
+          })
+        ) {
+          player.playSoundSwordCrash();
+          enermy.hitpoint -= 15;
+          document.querySelector(
+            "#enermyHealth"
+          ).style.width = `${enermy.hitpoint}px`;
+          hitbox.enable = false;
+        } else if (hitbox.enable) {
+        } else {
+          hitbox.enable = false;
+        }
       }
     });
 
     enermy.boxBucket.bucket.forEach((hitbox) => {
-      if (
-        this.collisionDetection({
-          hitbox: hitbox,
-          targetPlayer: player,
-        }) &&
-        hitbox.enable
-      ) {
-        enermy.playSoundHit();
-        player.hitpoint -= 15;
-        document.querySelector(
-          "#playerHealth"
-        ).style.width = `${player.hitpoint}px`;
-        hitbox.enable = false;
-      } else if (hitbox.enable) {
-      } else {
-        hitbox.enable = false;
+      if (hitbox.enable) {
+        if (
+          this.collisionDetection({
+            hitbox: hitbox,
+            targetPlayer: player,
+          })
+        ) {
+          enermy.playSoundHit();
+          player.hitpoint -= 15;
+          document.querySelector(
+            "#playerHealth"
+          ).style.width = `${player.hitpoint}px`;
+          hitbox.enable = false;
+        } else if (hitbox.enable) {
+        } else {
+          hitbox.enable = false;
+        }
       }
     });
   }
@@ -121,6 +134,9 @@ class Pixiro {
       ArrowLeft: {
         pressed: false,
       },
+      ArrowDown: {
+        pressed: false,
+      },
       ArrowRight: {
         pressed: false,
       },
@@ -159,23 +175,33 @@ class Pixiro {
       this.enermy.switchSprite("idle");
     }
 
-    if (this.player.velocity.y < 0) {
-      this.player.switchSprite("jump");
-    }
-    if (this.player.velocity.y > 0) {
-      this.player.switchSprite("fall");
-    }
-    if (this.enermy.velocity.y < 0) {
-      this.player.switchSprite("jump");
-    }
-    if (this.enermy.velocity.y > 0) {
-      this.player.switchSprite("fall");
+    if (this.player.isAttacking === false) {
+      if (this.player.velocity.y < 0) {
+        this.player.switchSprite("jump");
+      }
+      if (this.player.velocity.y > 0) {
+        this.player.switchSprite("fall");
+      }
     }
 
-    if (this.keys.ArrowRight.pressed && this.lastPressedKey === "ArrowRight") {
+    if (this.enermy.isAttacking === false) {
+      if (this.enermy.velocity.y < 0) {
+        this.enermy.switchSprite("jump");
+      }
+      if (this.enermy.velocity.y > 0) {
+        this.enermy.switchSprite("fall");
+      }
+    }
+
+    if (
+      this.player.isAttacking === false &&
+      this.keys.ArrowRight.pressed &&
+      this.lastPressedKey === "ArrowRight"
+    ) {
       this.player.velocity.x = 7;
       this.player.switchSprite("run");
     } else if (
+      this.player.isAttacking === false &&
       this.keys.ArrowLeft.pressed &&
       this.lastPressedKey === "ArrowLeft"
     ) {
@@ -256,7 +282,7 @@ class Pixiro {
           this.lastPressedKey = event.key;
           break;
         case " ":
-          if ((this.player.isAttacking == true)) return;
+          if (this.player.isAttacking == true) return;
           this.player.isAttacking = true;
           this.player.switchSprite("attack");
           this.player.boxBucket.enableAttack({ name: "basic_attack" });
@@ -264,8 +290,10 @@ class Pixiro {
           this.player.isAttacking = false;
           break;
         case "ArrowDown":
+          if (this.player.isAttacking == true) return;
+          this.player.isAttacking = true;
           this.player.switchSprite("guard");
-          console.log("guard");
+          this.player.boxBucket.enableAttack({ name: "guard" });
           break;
       }
     });
@@ -281,6 +309,10 @@ class Pixiro {
 
       if (event.key === "ArrowLeft") {
         this.keys.ArrowLeft.pressed = false;
+      }
+      if (event.key === "ArrowDown") {
+        this.keys.ArrowLeft.pressed = false;
+        this.player.isAttacking = false;
       }
     });
   }

@@ -7,9 +7,17 @@ class JapanCastle {
       imageSrc: "./assets/japan_castle/background.png",
       ctx: ctx,
     });
+
+    this.cat = new Sprite({
+      position: { x: 220, y: 235 },
+      scale: 0.08,
+      imageSrc: "./assets/cat_idle.png",
+      ctx: ctx,
+    });
   }
 
   render() {
     this.background.update();
+    this.cat.update();
   }
 }

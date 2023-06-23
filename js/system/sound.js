@@ -1,9 +1,12 @@
 const soundEffectMixin = {
   playSoundDash() {
-    new Audio("./assets/sounds/dash.wav").play();
+    new Audio("./assets/sounds/dash_mod.mp3").play();
   },
   playSoundHit() {
-    new Audio("./assets/sounds/hit.wav").play();
+    new Audio("./assets/sounds/hit_mod.mp3").play();
+  },
+  playSoundSwordCrash() {
+    new Audio("./assets/sounds/sword_crash_mod.mp3").play();
   },
 };
 

@@ -34,6 +34,17 @@ class Sensor {
   }
 
   checkAllHitDetection(player, enermy) {
+    const playerEnableHitbox = player.boxBucket.bucket.find((hitbox) => {
+      return hitbox.enable == true;
+    });
+    const enermyEnableHitbox = enermy.boxBucket.bucket.find((hitbox) => {
+      return hitbox.enable == true;
+    });
+
+    if (playerEnableHitbox && enermyEnableHitbox) {
+      console.log("챙");
+    }
+
     player.boxBucket.bucket.forEach((hitbox) => {
       if (hitbox.enable) {
         if (
@@ -42,7 +53,7 @@ class Sensor {
             targetPlayer: enermy,
           })
         ) {
-          player.playSoundHit();
+          player.playSoundSwordCrash();
           enermy.hitpoint -= 15;
           document.querySelector(
             "#enermyHealth"

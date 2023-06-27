@@ -219,9 +219,9 @@ class Fighter extends Sprite {
       }
     }
     if (sprite === "guard") {
-      if (this.image !== this.sprites.attack2.image) {
-        this.image.src = this.sprites.attack2.image.src;
-        this.framesMax = this.sprites.attack2.framesMax;
+      if (this.image !== this.sprites.guard.image) {
+        this.image.src = this.sprites.guard.image.src;
+        this.framesMax = this.sprites.guard.framesMax;
         this.framesCurrent = 0;
       }
     }

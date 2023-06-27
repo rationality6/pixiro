@@ -5,7 +5,7 @@ const soundEffectMixin = {
   playSoundHit() {
     new Audio("./assets/sounds/hit_mod.mp3").play();
   },
-  playSoundSwordCrash() {
+  playSoundSwordClash() {
     new Audio("./assets/sounds/sword_crash_mod.mp3").play();
   },
 };

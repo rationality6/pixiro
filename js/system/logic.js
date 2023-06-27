@@ -17,20 +17,21 @@ class Sensor {
 
   hitboxCollisionDetection({ hitbox1, hitbox2 }) {
     const hitbox1_x_start = hitbox1.position.x + hitbox1.offset.x;
-    const hitbox1_x_end = hitbox1.position.x + hitbox1.offset.x + hitbox1.width;
+    const hitbox1_x_end =
+      hitbox1.position.x + hitbox1.offset.x + hitbox1.area.width;
     const hitbox1_y_start = hitbox1.position.y + hitbox1.offset.y;
     const hitbox1_y_end =
-      hitbox1.position.y + hitbox1.offset.y + hitbox1.height;
+      hitbox1.position.y + hitbox1.offset.y + hitbox1.area.height;
 
     const hitbox2_x_start = hitbox2.position.x + hitbox2.offset.x;
-    const hitbox2_x_end = hitbox2.position.x + hitbox2.offset.x + hitbox2.width;
+    const hitbox2_x_end =
+      hitbox2.position.x + hitbox2.offset.x + hitbox2.area.width;
     const hitbox2_y_start = hitbox2.position.y + hitbox2.offset.y;
     const hitbox2_y_end =
-      hitbox2.position.y + hitbox2.offset.y + hitbox2.height;
+      hitbox2.position.y + hitbox2.offset.y + hitbox2.area.height;
 
-    // const result = (
-    //   hitbox1_x_start <= hitbox2_x_end &&
-    // )
+    const result = hitbox1_x_end >= hitbox2_x_start;
+    return result;
   }
 
   checkAllHitDetection(player, enermy) {
@@ -42,35 +43,81 @@ class Sensor {
     });
 
     if (playerEnableHitbox && enermyEnableHitbox) {
-      console.log("챙");
-    }
+      // clash swords check
+      const detactionResult = this.hitboxCollisionDetection({
+        hitbox1: playerEnableHitbox,
+        hitbox2: enermyEnableHitbox,
+      });
 
-    player.boxBucket.bucket.forEach((hitbox) => {
-      if (hitbox.enable) {
+      if (detactionResult) {
+        // clash swords
+        playerEnableHitbox.enable = false;
+        enermyEnableHitbox.enable = false;
+        player.playSoundSwordClash();
+
+      } else {
+        if (playerEnableHitbox) {
+          if (
+            this.collisionDetection({
+              hitbox: playerEnableHitbox,
+              targetPlayer: enermy,
+            })
+          ) {
+            player.playSoundHit();
+            enermy.hitpoint -= 15;
+            document.querySelector(
+              "#enermyHealth"
+            ).style.width = `${enermy.hitpoint}px`;
+            playerEnableHitbox.enable = false;
+          } else if (playerEnableHitbox.enable) {
+          } else {
+            playerEnableHitbox.enable = false;
+          }
+        }
+
+        if (enermyEnableHitbox) {
+          if (
+            this.collisionDetection({
+              hitbox: enermyEnableHitbox,
+              targetPlayer: player,
+            })
+          ) {
+            enermy.playSoundHit();
+            player.hitpoint -= 15;
+            document.querySelector(
+              "#playerHealth"
+            ).style.width = `${player.hitpoint}px`;
+            enermyEnableHitbox.enable = false;
+          } else if (enermyEnableHitbox.enable) {
+          } else {
+            enermyEnableHitbox.enable = false;
+          }
+        }
+      }
+    } else {
+      if (playerEnableHitbox) {
         if (
           this.collisionDetection({
-            hitbox: hitbox,
+            hitbox: playerEnableHitbox,
             targetPlayer: enermy,
           })
         ) {
-          player.playSoundSwordCrash();
+          player.playSoundHit();
           enermy.hitpoint -= 15;
           document.querySelector(
             "#enermyHealth"
           ).style.width = `${enermy.hitpoint}px`;
-          hitbox.enable = false;
-        } else if (hitbox.enable) {
+          playerEnableHitbox.enable = false;
+        } else if (playerEnableHitbox.enable) {
         } else {
-          hitbox.enable = false;
+          playerEnableHitbox.enable = false;
         }
       }
-    });
 
-    enermy.boxBucket.bucket.forEach((hitbox) => {
-      if (hitbox.enable) {
+      if (enermyEnableHitbox) {
         if (
           this.collisionDetection({
-            hitbox: hitbox,
+            hitbox: enermyEnableHitbox,
             targetPlayer: player,
           })
         ) {
@@ -79,13 +126,13 @@ class Sensor {
           document.querySelector(
             "#playerHealth"
           ).style.width = `${player.hitpoint}px`;
-          hitbox.enable = false;
-        } else if (hitbox.enable) {
+          enermyEnableHitbox.enable = false;
+        } else if (enermyEnableHitbox.enable) {
         } else {
-          hitbox.enable = false;
+          enermyEnableHitbox.enable = false;
         }
       }
-    });
+    }
   }
 }
 

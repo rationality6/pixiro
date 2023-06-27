@@ -53,10 +53,10 @@ class Lafull extends Fighter {
       },
       guard: {
         imageSrc: "./assets/lafull/Attack1.png",
-        framesMax: 10,
+        framesMax: 7,
       },
     };
 
-    super.mappingSprites()
+    super.mappingSprites();
   }
 }

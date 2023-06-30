@@ -72,10 +72,10 @@ class Fighter extends Sprite {
     this.ctx.strokeStyle = "blue";
     this.ctx.lineWidth = 2;
     this.ctx.strokeRect(
-      this.position.x + 1,
-      this.position.y + 1,
-      this.width + 1,
-      this.height + 1
+      this.position.x - 1,
+      this.position.y - 1,
+      this.width + 2,
+      this.height + 2
     );
   }
 

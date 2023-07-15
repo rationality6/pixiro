@@ -9,6 +9,7 @@ class AttackBox {
     enable = false,
     delay = 500,
     setTimeoutHandlers = [],
+    hitFrame = 4,
     ctx,
   }) {
     this.name = name;
@@ -22,6 +23,7 @@ class AttackBox {
     this.lineColor = lineColor;
     this.lineWidth = lineWidth;
     this.enable = enable;
+    this.hitFrame = hitFrame;
 
     this.setTimeoutHandlers = setTimeoutHandlers;
   }
@@ -31,7 +33,7 @@ class AttackBox {
     this.position.y = object.position.y;
   }
 
-  render() {
+  render({ object }) {
     if (!this.enable) return;
 
     this.ctx.strokeStyle = this.lineColor;
@@ -42,6 +44,17 @@ class AttackBox {
       this.area.width,
       this.area.height
     );
+
+    if (object.framesCurrent === this.hitFrame) {
+      this.ctx.strokeStyle = "red";
+      this.ctx.lineWidth = 4;
+      this.ctx.strokeRect(
+        this.position.x + this.offset.x - 2,
+        this.position.y + this.offset.y - 2,
+        this.area.width + 4,
+        this.area.height + 4
+      );
+    }
   }
 }
 
@@ -96,7 +109,7 @@ class BoxBucket {
     this.updatePositions({ object: object });
 
     this.bucket.forEach((bucketItem) => {
-      bucketItem.render();
+      bucketItem.render({ object: object });
     });
   }
 }

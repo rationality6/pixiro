@@ -62,6 +62,7 @@ class Sensor {
               hitbox: playerEnableHitbox,
               targetPlayer: enermy,
             })
+            && player.currentFrame === playerEnableHitbox.hitFrame
           ) {
             player.playSoundHit();
             enermy.hitpoint -= 15;
@@ -81,6 +82,7 @@ class Sensor {
               hitbox: enermyEnableHitbox,
               targetPlayer: player,
             })
+            && enermy.currentFrame === enermyEnableHitbox.hitFrame
           ) {
             enermy.playSoundHit();
             player.hitpoint -= 15;

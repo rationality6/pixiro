@@ -8,9 +8,16 @@ class JapanCastle {
       ctx: ctx,
     });
 
-    this.cat = new Sprite({
-      position: { x: 220, y: 235 },
-      scale: 0.08,
+    this.cat1 = new Sprite({
+      position: { x: 220, y: 245 },
+      scale: 0.07,
+      imageSrc: "./assets/cat_idle.png",
+      ctx: ctx,
+    });
+
+    this.cat2 = new Sprite({
+      position: { x: 490, y: 175 },
+      scale: 0.03,
       imageSrc: "./assets/cat_idle.png",
       ctx: ctx,
     });
@@ -18,6 +25,7 @@ class JapanCastle {
 
   render() {
     this.background.update();
-    this.cat.update();
+    this.cat1.update();
+    this.cat2.update();
   }
 }
